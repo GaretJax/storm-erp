@@ -1,0 +1,34 @@
+*.py[cod]
+/.virtualenv
+.DS_Store
+
+# Build artifacts
+/*.egg
+/*.egg-info
+/dist
+/build
+/eggs
+/sdist
+/develop-eggs
+/.sass-cache
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+/.coverage
+/.htmlcov
+/.tox
+
+# Translations
+*.mo
+
+# Sphinx
+/docs/_build
+
+# Generated static files (if any)
+/storm/static/styles
+/storm/static/scripts/master.js
+
+# Support files
+/fabenv.py
