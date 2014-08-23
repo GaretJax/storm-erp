@@ -13,7 +13,7 @@
 /.sass-cache
 
 # Installer logs
-pip-log.txt
+/pip-log.txt
 
 # Unit test / coverage reports
 /.coverage
@@ -32,3 +32,4 @@ pip-log.txt
 
 # Support files
 /fabenv.py
+/dev
