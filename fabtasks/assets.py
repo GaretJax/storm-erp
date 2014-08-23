@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 from livereload import Server
 from fabric.api import task, local, env
@@ -36,9 +38,9 @@ def livereload():
         'To livereload your web pages add the following script tag to '
         'your HTML:'
     )
-    print ''
-    print '    <script type="text/javascript" src="{}"></script>'.format(url)
-    print ''
+    print()
+    print('    <script type="text/javascript" src="{}"></script>'.format(url))
+    print()
     server = Server()
     server.watch(env.static_dir)
     server.watch(env.templates_dir)

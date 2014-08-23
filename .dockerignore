@@ -1,0 +1,11 @@
+.git
+
+*.egg-info
+*.pyc
+*.pyo
+
+fabenv.py
+dist
+build
+docs
+.htmlcov

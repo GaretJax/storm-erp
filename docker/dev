@@ -15,22 +15,25 @@ RUN /usr/bin/apt-get update && \
 
 # Install dependencies
 RUN /usr/bin/apt-get install -y \
-	python-dev python-pip \
+	python3-dev python3-pip \
 	postgresql-client-9.3 libpq5 \
 	libxml2-dev libxslt1-dev \
-	libpq-dev python-dev
+	libpq-dev
 
 # Install requirements here so that we don't have to install them each time
 # the app changes
 ADD requirements.txt /src/requirements.txt
-RUN pip install -r /src/requirements.txt
+RUN pip3 install -r /src/requirements.txt
 
-# Add the alembic configuration file (uncomment if needed)
-#ADD alembic.ini /etc/alembic.ini
+# Add the alembic configuration file
+ADD alembic.ini /etc/alembic.ini
+ADD cmd.py /usr/local/bin/storm
+
+ENTRYPOINT ["storm"]
 
 # Install the app
-ADD . /src
-RUN pip install --no-deps /src/*.whl
+#ADD . /src
+#RUN pip3 install --no-deps /src/*.whl
 
 # Configure runtime environment
 #USER nobody

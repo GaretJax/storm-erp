@@ -103,19 +103,14 @@ def build(skip_package_build=False):
     })
 
     cmd = bdist_wheel.bdist_wheel(dist)
-    filename = cmd.get_archive_basename() + '.whl'
+    cmd.universal = True
+    # TODO: This builds the development setup right now!
+    # filename = cmd.get_archive_basename() + '.whl'
 
     if not skip_package_build:
-        # TODO: Build inside a docker container
-        local('time python setup.py bdist_wheel')
+        local('time docker run -u {}:{} -w /src -v {}:/src python-dev '
+              'python3 setup.py bdist_wheel --universal'.format(
+                  os.getuid(), os.getgid(), os.path.realpath('.')))
 
-    d = tempfile.mkdtemp()
-    try:
-        shutil.copy2('requirements.txt', os.path.join(d, 'requirements.txt'))
-        shutil.copy2('alembic.ini', os.path.join(d, 'alembic.ini'))  # TODO
-        shutil.copy2('Dockerfile', os.path.join(d, 'Dockerfile'))
-        shutil.copy2(os.path.join('dist', filename), os.path.join(d, filename))
-        local('time docker build -t {} {} '.format(env.package_name, d))
-        local('docker tag {0} harbor.wsfcomp.com/{}'.format(env.package_name))
-    finally:
-        shutil.rmtree(d)
+    local('time docker-build -t {}/dev -f docker/dev .'
+          .format(env.package_name))

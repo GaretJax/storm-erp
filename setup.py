@@ -33,6 +33,7 @@ class Setup(object):
         packages = Setup.read(fname, fail_silently=True).split('\n')
         packages = (p.strip() for p in packages)
         packages = (p for p in packages if p and not p.startswith('#'))
+        packages = (p for p in packages if p and not p.startswith('https://'))
         return list(packages)
 
     @staticmethod
@@ -52,8 +53,7 @@ class Setup(object):
 
     @staticmethod
     def version():
-        data = Setup.read(os.path.join('storm',
-                                       '__init__.py'))
+        data = Setup.read(os.path.join('storm', '__init__.py'))
         version = (re.search(u"__version__\s*=\s*u?'([^']+)'", data)
                    .group(1).strip())
         return version
