@@ -23,3 +23,5 @@ sphinx_rtd_theme
 tox
 pytest
 pytest-cov
+
+six
