@@ -23,7 +23,7 @@ def lint():
     Checks the source code using flake8.
     """
     local('flake8 --statistics --exit-zero --max-complexity=10 '
-          '--exclude=\'*/migrations/*,build,dist,docs\' .')
+          '--exclude=\'build,dist,docs,dev\' .')
 
 
 @task
@@ -105,9 +105,9 @@ def package():
     # TODO: This builds the development setup right now!
     # filename = cmd.get_archive_basename() + '.whl'
 
-        local('time docker run -u {}:{} -w /src -v {}:/src python-dev '
-              'python3 setup.py bdist_wheel --universal'.format(
-                  os.getuid(), os.getgid(), os.path.realpath('.')))
+    local('time docker run -u {}:{} -w /src -v {}:/src python-dev '
+          'python3 setup.py bdist_wheel --universal'.format(
+              os.getuid(), os.getgid(), os.path.realpath('.')))
 
 
 @task

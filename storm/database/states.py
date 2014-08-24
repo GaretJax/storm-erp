@@ -1,7 +1,7 @@
 import datetime
 
 import sqlalchemy as sa
-from sqlalchemy.orm import relationship, backref, column_property, aliased
+from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.ext.declarative import declared_attr
 
 
@@ -48,7 +48,7 @@ class StatusMixin:
             .limit(1)
         )
 
-        #relation.status_id = column_property(current_status.c.status_id)
+        # relation.status_id = column_property(current_status.c.status_id)
 
         relation.status = relationship(
             cls,
