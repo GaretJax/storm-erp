@@ -14,7 +14,7 @@ _engine = None
 def get_engine():
     global _engine
     if not _engine:
-        _engine = create_engine(settings.getstring('DB_URL'),
+        _engine = create_engine(settings.DB_URL,
                                 isolation_level='SERIALIZABLE')
     return _engine
 

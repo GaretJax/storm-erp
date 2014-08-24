@@ -1,84 +1,190 @@
 import os
-
 import pytest
 
-from storm.config import ConfigurationProvider, FromStringTypeCoercionMixin
-from storm.config import ImproperlyConfigured, DictConfig, settings
+from sqlalchemy.engine import url
+
+from storm.config.providers import ConfigurationProvider, DictConfig
+from storm.config.providers import NOT_PROVIDED
+from storm.config.schema import BoundValue, Settings, Value, ref
+from storm.config.schema import ImproperlyConfigured
+from storm.config import settings, types
 
 
 def test_config_abc():
     conf = ConfigurationProvider()
 
     with pytest.raises(NotImplementedError):
-        conf.getstring('key')
-
-    with pytest.raises(NotImplementedError):
-        conf.getint('key')
-
-    with pytest.raises(NotImplementedError):
-        conf.getfloat('key')
-
-    with pytest.raises(NotImplementedError):
-        conf.getbool('key')
-
-    with pytest.raises(NotImplementedError):
-        conf.getstring('key', default=None)
-
-    with pytest.raises(NotImplementedError):
-        conf.getint('key', default=None)
-
-    with pytest.raises(NotImplementedError):
-        conf.getfloat('key', default=None)
-
-    with pytest.raises(NotImplementedError):
-        conf.getbool('key', default=None)
-
-
-def test_from_string():
-    class Conf(FromStringTypeCoercionMixin):
-        def __init__(self, value):
-            self.value = value
-
-        def _get(self, key, default):
-            return self.value
-
-    assert Conf('string').getstring('key') == 'string'
-
-    assert Conf('1').getint('key') == 1
-    with pytest.raises(ImproperlyConfigured):
-        assert Conf('1.1').getint('key') == 1
-    with pytest.raises(ImproperlyConfigured):
-        Conf('t').getint('key')
-
-    assert Conf('1').getfloat('key') == 1
-    assert Conf('1.').getfloat('key') == 1
-    assert Conf('1.0').getfloat('key') == 1
-    assert Conf('99.9345').getfloat('key') == 99.9345
-    assert Conf('-1.2').getfloat('key') == -1.2
-
-    assert Conf('1').getbool('key') == True
-    assert Conf('y').getbool('key') == True
-    assert Conf('yes').getbool('key') == True
-    assert Conf('True').getbool('key') == True
-    assert Conf('0').getbool('key') == False
-    assert Conf('n').getbool('key') == False
-    assert Conf('no').getbool('key') == False
-    assert Conf('false').getbool('key') == False
-    with pytest.raises(ImproperlyConfigured):
-        Conf('bof').getbool('key')
+        conf.get('key')
 
 
 def test_dict_config():
-    conf = DictConfig('TEST_', {
+    conf = DictConfig({
         'TEST_KEY': 1,
-    })
+    }, prefix='TEST_')
 
-    assert conf.getint('KEY') == 1
-    assert conf.getint('NOKEY', 1) == 1
+    assert conf.get('KEY') == 1
+    assert conf.get('NOKEY') is NOT_PROVIDED
+
+
+def test_simple():
+    class SimpleSettings(Settings):
+        INTKEY = Value(int)
+        STRKEY = Value(str)
+        NOKEY = Value(str)
+        DEFKEY = Value(str, default='hello')
+
+    assert isinstance(SimpleSettings.INTKEY, BoundValue)
+
+    s = SimpleSettings(DictConfig({
+        'INTKEY': '1',
+        'STRKEY': 'string'
+    }))
+    assert s.INTKEY == 1
+    assert s.STRKEY == 'string'
+    assert s.DEFKEY == 'hello'
+
     with pytest.raises(ImproperlyConfigured):
-        assert conf.getint('NOKEY') == 1
+        s.NOKEY
+
+
+def test_readonly():
+    class SimpleSettings(Settings):
+        KEY = Value(int)
+
+    s = SimpleSettings(DictConfig({
+        'KEY': '1',
+    }))
+    assert s.KEY == 1
+
+    with pytest.raises(AttributeError):
+        s.KEY = 2
+
+    assert s.KEY == 1
+
+
+def test_reference():
+    class RefSettings(Settings):
+        KEY1 = Value(int)
+        KEY2 = Value(int, default=ref('KEY1'))
+
+    s = RefSettings(DictConfig({
+        'KEY1': '1',
+        'KEY2': '2',
+    }))
+
+    assert s.KEY1 == 1
+    assert s.KEY2 == 2
+
+    s = RefSettings(DictConfig({
+        'KEY1': '1',
+    }))
+
+    assert s.KEY1 == 1
+    assert s.KEY2 == 1
+
+
+def test_mixin():
+    class TestMixin:
+        KEY = Value(int)
+
+    class SimpleSettings(TestMixin, Settings):
+        pass
+
+    class SimpleSettingsOverride(TestMixin, Settings):
+        KEY = Value(str)
+
+    assert isinstance(SimpleSettings.KEY, BoundValue)
+    assert isinstance(SimpleSettingsOverride.KEY, BoundValue)
+
+    s = SimpleSettings(DictConfig({
+        'KEY': '1'
+    }))
+    assert s.KEY == 1
+
+    s = SimpleSettingsOverride(DictConfig({
+        'KEY': 'string'
+    }))
+    assert s.KEY == 'string'
+
+
+def test_iter():
+    class SimpleSettings(Settings):
+        KEY1 = Value(int)
+        KEY2 = Value(int)
+        KEY3 = Value(int)
+        KEY4 = Value(int)
+        KEY5 = Value(int)
+
+    s = SimpleSettings(DictConfig({
+        'KEY1': '10',
+        'KEY2': '20',
+        'KEY3': '30',
+        'KEY4': '40',
+        'KEY5': '50',
+    }))
+
+    assert list(s.keys()) == [
+        'KEY1',
+        'KEY2',
+        'KEY3',
+        'KEY4',
+        'KEY5',
+    ]
+    assert list(s.items()) == [
+        ('KEY1', 10),
+        ('KEY2', 20),
+        ('KEY3', 30),
+        ('KEY4', 40),
+        ('KEY5', 50),
+    ]
+    assert s.as_dict() == {
+        'KEY1': 10,
+        'KEY2': 20,
+        'KEY3': 30,
+        'KEY4': 40,
+        'KEY5': 50,
+    }
+
+
+def test_boolean():
+    assert types.boolean('y')
+    assert types.boolean('yes')
+    assert types.boolean('1')
+    assert types.boolean('true')
+    assert types.boolean('on')
+    assert not types.boolean('n')
+    assert not types.boolean('')
+    assert not types.boolean('no')
+    assert not types.boolean('false')
+    assert not types.boolean('off')
+    assert not types.boolean('0')
+
+
+def test_sqlalchemy_url():
+    val = types.sqlalchemy_url('postgres://user:password@host/database')
+    assert isinstance(val, url.URL)
+
+
+# def test_validate():
+#     class SimpleSettings(Settings):
+#         KEY = Value(int)
+#
+#     s = SimpleSettings(DictConfig({}))
+#     with pytest.raises(ImproperlyConfigured):
+#         s.validate()
+#
+#     s = SimpleSettings(DictConfig({
+#         'KEY': '1',
+#     }))
+#     s.validate()
+#
+#     s = SimpleSettings(DictConfig({
+#         'KEY': 'string'
+#     }))
+#     with pytest.raises(ImproperlyConfigured):
+#         s.validate()
 
 
 def test_env_config():
-    assert settings.__class__ == DictConfig
-    assert settings._conf_dict == os.environ
+    assert settings.config_provider.__class__ == DictConfig
+    assert settings.config_provider._conf_dict == os.environ

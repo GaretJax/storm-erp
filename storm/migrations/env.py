@@ -39,8 +39,7 @@ def run_migrations_offline():
     Calls to context.execute() here emit the given string to the
     script output.
     """
-    url = settings.getstring('DB_URL')
-    context.configure(url=url, target_metadata=target_metadata)
+    context.configure(url=settings.DB_URL, target_metadata=target_metadata)
 
     with context.begin_transaction():
         context.run_migrations()
@@ -53,9 +52,8 @@ def run_migrations_online():
     In this scenario we need to create an Engine
     and associate a connection with the context.
     """
-    url = settings.getstring('DB_URL')
     engine = engine_from_config(config.get_section(config.config_ini_section),
-                                url=url,
+                                url=settings.DB_URL,
                                 prefix='sqlalchemy.',
                                 poolclass=pool.NullPool)
 
