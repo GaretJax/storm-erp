@@ -11,3 +11,7 @@ def main():
 
 from .web.runner import runserver
 main.add_command(runserver)
+
+from .database.cli import initdb, migrate
+main.add_command(initdb)
+main.add_command(migrate)
