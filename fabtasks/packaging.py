@@ -2,8 +2,6 @@ from __future__ import print_function
 
 import os
 import pipes
-import tempfile
-import shutil
 
 from fabric.api import settings, task, local, hide, env
 from fabric.contrib.console import confirm
@@ -86,7 +84,7 @@ def release():
 
 
 @task
-def build(skip_package_build=False):
+def package():
     """
     Build a Docker container with the application.
 
@@ -107,10 +105,12 @@ def build(skip_package_build=False):
     # TODO: This builds the development setup right now!
     # filename = cmd.get_archive_basename() + '.whl'
 
-    if not skip_package_build:
         local('time docker run -u {}:{} -w /src -v {}:/src python-dev '
               'python3 setup.py bdist_wheel --universal'.format(
                   os.getuid(), os.getgid(), os.path.realpath('.')))
 
-    local('time docker-build -t {}/dev -f docker/dev .'
-          .format(env.package_name))
+
+@task
+def build(flavor):
+    local('time docker-build -t {}/{flavor} -f docker/{flavor} .'
+          .format(env.package_name, flavor=flavor))

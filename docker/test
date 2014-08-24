@@ -24,7 +24,11 @@ RUN /usr/bin/apt-get install -y \
 # the app changes
 ADD requirements.txt /src/requirements.txt
 RUN pip3 install -r /src/requirements.txt
-RUN pip3 install pytest pytest-cov
+
+# Install the test requirements after in order to share the image of the
+# previous step with other similar images.
+ADD requirements-test.txt /src/requirements-test.txt
+RUN pip3 install -r /src/requirements-test.txt
 
 ENTRYPOINT ["py.test", "--cov", "storm"]
 CMD ["storm"]

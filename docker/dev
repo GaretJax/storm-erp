@@ -27,13 +27,16 @@ RUN pip3 install -r /src/requirements.txt
 
 # Add the alembic configuration file
 ADD alembic.ini /etc/alembic.ini
-ADD cmd.py /usr/local/bin/storm
 
-ENTRYPOINT ["storm"]
+# Add a fake command line entry point. This is normally handled by setuptools
+# and entry-points.ini while installing, but we don't want to run
+# `python setup.py develop` each time we enter the container.
+# ADD cmd.py /usr/local/bin/storm
+ENTRYPOINT ["/src/cmd.py"]
 
 # Install the app
-#ADD . /src
-#RUN pip3 install --no-deps /src/*.whl
+# ADD . /src
+# RUN pip3 install --no-deps /src/*.whl
 
 # Configure runtime environment
-#USER nobody
+# USER nobody

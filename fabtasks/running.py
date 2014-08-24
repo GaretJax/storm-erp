@@ -69,5 +69,5 @@ def migrate(cmd='-c /etc/alembic.ini upgrade head'):
 
 
 @task
-def test():
-    _rundocker('test')
+def test(cmd=''):
+    _rundocker('test', cmd)
