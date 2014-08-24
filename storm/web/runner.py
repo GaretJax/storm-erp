@@ -37,12 +37,16 @@ def which(program):
 
 
 @click.command()
+@click.option('--debug/--no-debug', '-d', default=False)
 @click.argument('interface', required=False)
-@click.pass_context
-def runserver(ctx, interface):
+def runserver(debug, interface):
+    """
+    Run a uWSGI backed production-grade web server for the STORM application.
+    """
+
     package = __name__.split('.', 1)[0]
 
-    load_config(ctx.obj['debug'], package.upper())
+    load_config(debug, package.upper())
 
     if not interface:
         interface = '{}:{}'.format(DEFAULT_INTERFACE, DEFAULT_PORT)
@@ -66,7 +70,7 @@ def runserver(ctx, interface):
         '--callable', 'app',
     ]
 
-    if ctx.obj['debug']:
+    if debug:
         cmdargs.extend([
             '--py-autoreload', '1',
             '--catch-exceptions',

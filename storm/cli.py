@@ -1,13 +1,12 @@
 import click
 
 
-@click.group()
-@click.option('--debug/--no-debug', '-d', default=False)
-@click.pass_context
-def main(ctx, debug):
-    ctx.obj = {
-        'debug': debug,
-    }
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+
+
+@click.group(context_settings=CONTEXT_SETTINGS)
+def main():
+    pass
 
 
 from .web.runner import runserver
