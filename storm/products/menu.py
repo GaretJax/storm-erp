@@ -1,29 +1,16 @@
 from storm.web import menu as m
 
-contacts = m.Menu('Address book')
-contacts.add_all([
-    m.MenuItem('Organizations', 'products.list_categories'),
-    m.MenuItem('People', 'products.list_products'),
-])
-
-catalog = m.Menu('Catalog')
-catalog.add_all([
+main_menu_item = m.Menu('Catalog')
+main_menu_item.add_all([
     m.MenuItem('Categories', 'products.list_categories'),
     m.MenuItem('Products', 'products.list_products'),
 ])
 
-stock = m.Menu('Stock management')
-stock.add_all([
+stock_menu_item = m.Menu('Stock management')
+stock_menu_item.add_all([
     m.MenuItem('Locations', 'products.list_products'),
     m.MenuItem('Movements', 'products.list_products'),
     m.MenuItem('Reporting', 'products.list_products'),
-])
-
-main_menu = m.Menu('Main menu')
-main_menu.add_all([
-    contacts,
-    catalog,
-    stock,
 ])
 
 categories_menu = m.Menu('Categories')

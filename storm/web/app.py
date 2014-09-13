@@ -14,6 +14,8 @@ import storm
 from storm import database
 from storm.config import settings
 
+from . import menu as m
+
 
 def create_app():
     app = Flask(__name__, template_folder='../frontend/templates',
@@ -130,7 +132,10 @@ def create_app():
     def logos():
         return render_template('logos.html')
 
+    app.main_menu = m.Menu('Main menu')
+
     blueprints = [
+        ('storm.contacts.controllers.contacts_frontend', '/contacts'),
         ('storm.products.controllers.products_frontend', '/products'),
     ]
 
@@ -139,5 +144,10 @@ def create_app():
         blueprint = getattr(importlib.import_module(module_path),
                             blueprint_name)
         app.register_blueprint(blueprint, url_prefix=url_prefix)
+
+    # Global context processors
+    @app.context_processor
+    def menu_processor():
+        return {'menu': app.main_menu}
 
     return handler

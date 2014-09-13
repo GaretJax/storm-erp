@@ -5,20 +5,18 @@ from storm.database import session, mptt
 from storm.web.views import DeleteView, ListView, SidebarMixin
 
 from . import models, forms
-from .menu import main_menu, categories_menu, products_menu
+from .menu import main_menu_item, categories_menu, products_menu
+from .menu import stock_menu_item  # TODO: Move to its own module
 
 
 products_frontend = Blueprint('products', __name__,
                               template_folder='templates')
 
 
-@products_frontend.context_processor
-def menu_processor():
-    return {
-        'menu': main_menu,
-    }
-
-
+@products_frontend.record_once
+def register_menuitem(state):
+    state.app.main_menu.add(main_menu_item)
+    state.app.main_menu.add(stock_menu_item)
 
 
 class ListCategories(SidebarMixin, ListView):
@@ -112,10 +110,7 @@ class ListProducts(SidebarMixin, ListView):
     template_name = 'products/products.html'
 
     def get_objects(self):
-        products = (session.query(models.Product)
-                    #.filter(models.Product.is_active)
-                    )
-        return products
+        return session.query(models.Product)
 
 products_frontend.add_url_rule(
     '/', view_func=ListProducts.as_view('list_products'))
