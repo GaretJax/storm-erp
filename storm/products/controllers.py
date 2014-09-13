@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, abort, flash
 import sqlalchemy as sa
 
 from storm.database import session, mptt
-from storm.web.views import DeleteView, ListView
+from storm.web.views import DeleteView, ListView, SidebarMixin
 
 from . import models, forms
 from .menu import main_menu, categories_menu, products_menu
@@ -19,13 +19,6 @@ def menu_processor():
     }
 
 
-class SidebarMixin:
-    sidebar_menu = None
-
-    def get_context_data(self, **ctx):
-        ctx = super().get_context_data(**ctx)
-        ctx['sidebar_menu'] = self.sidebar_menu
-        return ctx
 
 
 class ListCategories(SidebarMixin, ListView):
