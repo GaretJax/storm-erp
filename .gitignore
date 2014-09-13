@@ -29,8 +29,8 @@
 /docs/_build
 
 # Generated static files (if any)
-/storm/static/styles
-/storm/static/scripts/master.js
+/storm/frontend/static/styles
+/storm/frontend/static/scripts/master.js
 
 # Support files
 /fabenv.py
