@@ -1,7 +1,10 @@
-from __future__ import with_statement
+import glob
+import storm
+import importlib
+from os.path import dirname, join
 
 from alembic import context
-from sqlalchemy import engine_from_config, pool
+from sqlalchemy import engine_from_config, pool, MetaData
 from logging.config import fileConfig
 
 from storm.config import settings
@@ -16,11 +19,20 @@ config = context.config
 if config.config_file_name:
     fileConfig(config.config_file_name)
 
+
+def get_metadata():
+    m = MetaData()
+    models = join(dirname(storm.__file__), '*', 'models.py')
+    for path in glob.glob(models):
+        package = path.rsplit('/', 2)[1]
+        module = importlib.import_module('storm.{}.models'.format(package))
+        for t in module.Model.metadata.tables.values():
+            t.tometadata(m)
+    return m
+
 # add your model's MetaData object here
 # for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-target_metadata = None
+target_metadata = get_metadata()
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
