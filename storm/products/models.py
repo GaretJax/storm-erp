@@ -17,7 +17,7 @@ class Category(mptt.MPTTBase, Model):
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.Unicode(120), nullable=False)
     description = sa.Column(sa.Text)
-    active = sa.Column(sa.Boolean, nullable=False, default=False)
+    is_active = sa.Column(sa.Boolean, nullable=False, default=False)
 
 
 class Product(Model):
@@ -29,7 +29,7 @@ class Product(Model):
     id = sa.Column(sa.Integer, primary_key=True)
     upc = sa.Column(sa.String(128), unique=True, nullable=False)
     ean13 = sa.Column(sa.Integer, unique=True)
-    active = sa.Column(sa.Boolean, nullable=False, default=False)
+    is_active = sa.Column(sa.Boolean, nullable=False, default=False)
     type = sa.Column(sa.String(50), nullable=True)
 
     name = sa.Column(sa.Unicode(120), nullable=False)
@@ -54,7 +54,7 @@ class Product(Model):
 
 
 product_categories = sa.Table(
-    'storm_product_categories',
+    'storm_product_categories', Model.metadata,
     sa.Column('product_id', sa.Integer, sa.ForeignKey(Product.id),
               primary_key=True),
     sa.Column('category_id', sa.Integer, sa.ForeignKey(Category.id),

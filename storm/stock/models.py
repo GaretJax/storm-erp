@@ -230,8 +230,8 @@ class Move(Model):
     lot_id = sa.Column(sa.Integer, sa.ForeignKey(Lot.id), nullable=True)
     quantity = sa.Column(sa.Numeric(18, 6), nullable=False)
 
-    scheduled = sa.Column(sa.Boolean, default=False)
-    executed = sa.Column(sa.Boolean, default=False)
+    is_scheduled = sa.Column(sa.Boolean, default=False)
+    is_executed = sa.Column(sa.Boolean, default=False)
 
     batch = relationship(Batch, backref=backref('moves', lazy='dynamic'))
     source = relationship(Location, foreign_keys=source_location_id,
