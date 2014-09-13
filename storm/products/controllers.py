@@ -2,10 +2,10 @@ from flask import Blueprint, render_template, redirect, url_for, abort, flash
 import sqlalchemy as sa
 
 from storm.database import session, mptt
-from storm.web.views import DeleteView, ListView, SidebarMixin
+from storm.web.views import DeleteView, ListView, SidebarMixin, EditView
 
 from . import models, forms
-from .menu import main_menu_item, categories_menu, products_menu
+from .menu import main_menu_item, products_menu
 from .menu import stock_menu_item  # TODO: Move to its own module
 
 
@@ -20,7 +20,7 @@ def register_menuitem(state):
 
 
 class ListCategories(SidebarMixin, ListView):
-    sidebar_menu = categories_menu
+    sidebar_menu = products_menu
     template_name = 'products/categories.html'
 
     def get_objects(self):
@@ -36,7 +36,7 @@ products_frontend.add_url_rule(
 )
 
 
-@products_frontend.route('/categories/new/', methods=['GET', 'POST'],
+@products_frontend.route('/categories/add/', methods=['GET', 'POST'],
                          endpoint='add_category')
 @products_frontend.route('/categories/<int:category_id>/',
                          methods=['GET', 'POST'])
@@ -67,7 +67,7 @@ def edit_category(category_id=None):
         return redirect(url_for('.list_categories'))
 
     return render_template('products/edit_category.html', edit=edit,
-                           sidebar_menu=categories_menu, form=form,
+                           sidebar_menu=products_menu, form=form,
                            object=category)
 
 
@@ -82,7 +82,7 @@ def move_category():
 
 
 class DeleteCategory(SidebarMixin, DeleteView):
-    sidebar_menu = categories_menu
+    sidebar_menu = products_menu
     model = models.Category
     template_name = 'products/delete_category.html'
     redirect_endpoint = '.list_categories'
@@ -116,31 +116,25 @@ products_frontend.add_url_rule(
     '/', view_func=ListProducts.as_view('list_products'))
 
 
-@products_frontend.route('/new/', methods=['GET', 'POST'],
-                         endpoint='add_product')
-@products_frontend.route('/<int:product_id>/',
-                         methods=['GET', 'POST'])
-def edit_product(product_id=None):
-    edit = product_id is not None
+class EditProduct(SidebarMixin, EditView):
+    model = models.Product
+    form_class = forms.ProductForm
+    template_name = 'products/edit_product.html'
+    sidebar_menu = products_menu
 
-    if edit:
-        product = session.query(models.Product).get(product_id)
-        if not product:
-            abort(404)
-        form = forms.ProductForm(obj=product)
-    else:
-        product = models.Product()
-        form = forms.ProductForm()
+    def get_success_url(self):
+        return url_for('.list_products')
 
-    if form.validate_on_submit():
-        form.populate_obj(product)
-        if not edit:
-            product.is_active = True
-            session.add(product)
-            flash('The product was correctly created.', 'success')
-        else:
-            flash('The product was correctly updated.', 'success')
-        return redirect(url_for('.list_products'))
+    def save_changes(self, form, object):
+        flash('The product was correctly updated.', 'success')
+        return super().create_object(form, object)
 
-    return render_template('products/edit_product.html', edit=edit,
-                           sidebar_menu=products_menu, form=form)
+    def create_object(self, form, object):
+        flash('The product was correctly created.', 'success')
+        object.is_active = True
+        return super().create_object(form, object)
+
+products_frontend.add_url_rule('/add/', methods=['GET', 'POST'],
+                               view_func=EditProduct.as_view('add_product'))
+products_frontend.add_url_rule('/<int:object_id>/', methods=['GET', 'POST'],
+                               view_func=EditProduct.as_view('edit_product'))

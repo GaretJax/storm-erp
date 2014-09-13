@@ -13,15 +13,12 @@ stock_menu_item.add_all([
     m.MenuItem('Reporting', 'products.list_products'),
 ])
 
-categories_menu = m.Menu('Categories')
-categories_menu.add_all([
+products_menu = m.Menu('Products')
+products_menu.add_grouped('Categories', [
     m.MenuItem('Manage categories', 'products.list_categories'),
     m.MenuItem('Add a new category', 'products.add_category'),
 ])
-
-
-products_menu = m.Menu('Products')
-products_menu.add_all([
+products_menu.add_grouped('Products', [
     m.MenuItem('Manage products', 'products.list_products'),
     m.MenuItem('Add a new product', 'products.add_product'),
 ])

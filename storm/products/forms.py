@@ -133,4 +133,3 @@ class ProductForm(ModelForm):
 
     class Meta:
         model = models.Product
-        # only = ['name', 'description']

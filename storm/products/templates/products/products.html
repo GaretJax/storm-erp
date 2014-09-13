@@ -19,7 +19,7 @@
         {% for p in object_list %}
           <tr>
             <td><input type="checkbox"{% if p.is_active %} checked="checked"{% endif %}/></td>
-            <td><a href="{{ url_for('.edit_product', product_id=p.id) }}">{{ p.name }}</a></td>
+            <td><a href="{{ url_for('.edit_product', object_id=p.id) }}">{{ p.name }}</a></td>
             <td>{{ p.upc }}</td>
             <td>{{ p.ean13 or '<span class="text-muted">n/d</span>'|safe }}</td>
           </tr>
