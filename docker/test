@@ -30,5 +30,5 @@ RUN pip3 install -r /src/requirements.txt
 ADD requirements-test.txt /src/requirements-test.txt
 RUN pip3 install -r /src/requirements-test.txt
 
-ENTRYPOINT ["py.test", "--cov", "storm"]
+ENTRYPOINT ["py.test", "--cov-report=html", "--cov-report=term-missing", "--cov", "storm"]
 CMD ["storm"]
