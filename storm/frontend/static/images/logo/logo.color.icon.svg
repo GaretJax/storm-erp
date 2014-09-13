@@ -1,0 +1,150 @@
+<?xml version="1.0" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+
+<svg width="97.1666666667px" height="44.6111111111px" version="1.1" viewBox="0 0 1166 535.333333333" xmlns="http://www.w3.org/2000/svg">
+  
+  <defs>
+    <style type="text/css"><![CDATA[
+      @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+      #guides {
+          stroke: rgba(150, 150, 150, 0.5);
+          stroke-width: 2;
+      }
+      #wireframe {
+          stroke: rgba(0, 0, 0, 0.6);
+          stroke-width: 3;
+          fill: none;
+      }
+      #type {
+        font-family: 'Open Sans', "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+        font-size: 51px;
+        font-weight: bold;
+        fill: #666;
+      }
+      #slogan {
+        font-family: 'Open Sans', "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+        font-size: 30px;
+        font-weight: 200;
+        fill: #999;
+      }
+      #bg {
+        fill: none;
+      }
+      #type-line {
+        stroke: #777;
+        stroke-width: 2;
+        fill: transparent;
+      }
+      #colors {
+        stroke-width: 1;
+        stroke-linejoin: round;
+      }
+
+      /* Yellow palette */
+      .pl-yellow #t1 {fill: #ffff00; stroke: #ffff00;}
+      .pl-yellow #t2 {fill: #fff112; stroke: #fff112;}
+      .pl-yellow #t3 {fill: #f7e652; stroke: #f7e652;}
+      .pl-yellow #t4 {fill: #fbd814; stroke: #fbd814;}
+
+      .pl-yellow #b1 {fill: #ff5918; stroke: #ff5918;}
+      .pl-yellow #b2 {fill: #fb762d; stroke: #fb762d;}
+      .pl-yellow #b3 {fill: #fb982d; stroke: #fb982d;}
+      .pl-yellow #b4 {fill: #fbcd53; stroke: #fbcd53;}
+      .pl-yellow #b5 {fill: #fbba53; stroke: #fbba53;}
+
+      /* Blue palette */
+      .pl-blue #t1 {fill: #3799eb; stroke: #3799eb;}
+      .pl-blue #t2 {fill: #348fdc; stroke: #348fdc;}
+      .pl-blue #t3 {fill: #2472dc; stroke: #2472dc;}
+      .pl-blue #t4 {fill: #2167dc; stroke: #2167dc;}
+
+      .pl-blue #b1 {fill: #2e5678; stroke: #2e5678;}
+      .pl-blue #b2 {fill: #2766a1; stroke: #2766a1;}
+      .pl-blue #b3 {fill: #16344f; stroke: #16344f;}
+      .pl-blue #b4 {fill: #1f506f; stroke: #1f506f;}
+      .pl-blue #b5 {fill: #143f87; stroke: #143f87;}
+
+      /* Green palette */
+      .pl-green #t1 {fill: #8cff70; stroke: #8cff70;}
+      .pl-green #t2 {fill: #8ef564; stroke: #8ef564;}
+      .pl-green #t3 {fill: #20f17a; stroke: #20f17a;}
+      .pl-green #t4 {fill: #3fd770; stroke: #3fd770;}
+
+      .pl-green #b1 {fill: #1d1d1b; stroke: #1d1d1b;}
+      .pl-green #b2 {fill: #34304b; stroke: #34304b;}
+      .pl-green #b3 {fill: #2d375a; stroke: #2d375a;}
+      .pl-green #b4 {fill: #4e5067; stroke: #4e5067;}
+      .pl-green #b5 {fill: #4e5a74; stroke: #4e5a74;}
+
+      /* Blue/orange */
+      .pl-blue-orange #t1 {fill: #3799eb; stroke: #3799eb;}
+      .pl-blue-orange #t2 {fill: #348fdc; stroke: #348fdc;}
+      .pl-blue-orange #t3 {fill: #2472dc; stroke: #2472dc;}
+      .pl-blue-orange #t4 {fill: #2167dc; stroke: #2167dc;}
+
+      .pl-blue-orange #b1 {fill: #ff5918; stroke: #ff5918;}
+      .pl-blue-orange #b2 {fill: #fb762d; stroke: #fb762d;}
+      .pl-blue-orange #b3 {fill: #fb982d; stroke: #fb982d;}
+      .pl-blue-orange #b4 {fill: #fbcd53; stroke: #fbcd53;}
+      .pl-blue-orange #b5 {fill: #fbba53; stroke: #fbba53;}
+
+      /* Blue/yellow */
+      .pl-blue-yellow #t1 {fill: #3799eb; stroke: #3799eb;}
+      .pl-blue-yellow #t2 {fill: #348fdc; stroke: #348fdc;}
+      .pl-blue-yellow #t3 {fill: #2472dc; stroke: #2472dc;}
+      .pl-blue-yellow #t4 {fill: #2167dc; stroke: #2167dc;}
+
+      .pl-blue-yellow #b1 {fill: #fbcd53; stroke: #fbcd53;}
+      .pl-blue-yellow #b4 {fill: #fff444; stroke: #fff444;}
+      .pl-blue-yellow #b5 {fill: #fff112; stroke: #fff112;}
+      .pl-blue-yellow #b3 {fill: #ffe92a; stroke: #ffe92a;}
+      .pl-blue-yellow #b2 {fill: #fbd814; stroke: #fbd814;}
+
+      
+	#wireframe {
+		stroke-width: 12;
+	}
+	#t1 {fill: #fff112;}
+	#t2 {fill: #f7e652;}
+	#t3 {fill: #fbd814;}
+	#t4 {fill: #fbd814;}
+
+	#b1 {fill: #ff5918;}
+	#b2 {fill: #fb762d;}
+	#b3 {fill: #fb982d;}
+	#b4 {fill: #fbba53;}
+	#b5 {fill: #fbba53;}
+
+	#type {
+		/*fill: #a7b2bd;*/
+		font-size: 230px;
+	}
+
+    ]]></style>
+  </defs>
+
+  <rect x="0" y="0" width="100%" height="100%" id="bg" />
+
+  <g transform="translate(184, 534.333333333)" class="pl-blue-yellow">
+    
+	
+    <g id="colors">
+      
+      <path d="M -60.8333333333 -533.333333333 L 60.8333333333 -533.333333333 L 0.0 -400.0 z" id="t1"/>
+      <path d="M -60.8333333333 -533.333333333 L 0.0 -400.0 L -44.7399872004 -301.939754081 L -96.3999920002 -377.424692602 z" id="t2"/>
+      <path d="M -44.7399872004 -301.939754081 L -87.2826086957 -208.695652174 L -127.75 -240.0 L -96.3999920002 -377.424692602 z" id="t3"/>
+      <path d="M -44.7399872004 -301.939754081 L -87.2826086957 -208.695652174 L -83.0922658474 -205.454129906 L -30.8999520014 -281.716871599 z" id="t4"/>
+      <path d="M -182.5 0.0 L 0.0 -141.176470588 L -56.1538461538 -184.615384615 z" id="b1"/>
+      <path d="M 0.0 -141.176470588 L -56.1538461538 -184.615384615 L 10.2999840005 -281.716871599 L 69.6230560006 -195.034757261 z" id="b2"/>
+      <path d="M 87.2826086957 -208.695652174 L 36.5 -320.0 L 10.2999840005 -281.716871599 L 69.6230560006 -195.034757261 z" id="b3"/>
+      <path d="M 10.2999840005 -281.716871599 L 36.5 -320.0 L 18.6858078247 -359.044804768 L -5.83704340995 -305.296089733 z" id="b4"/>
+      <path d="M 18.6858078247 -359.044804768 L 100.592903912 -359.044804768 L 127.75 -240.0 L 87.2826086957 -208.695652174 z" id="b5"/>
+    </g>
+  
+
+    
+	<text x="190" y="-430" dy="1em" id="type">STORM</text>
+
+  </g>
+</svg>

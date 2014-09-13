@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <style type="text/css">
+      @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+      body {
+        padding: 50px;
+        font-family: 'Open Sans', "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+        background: #eee;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+        vertical-align: middle;
+        background: #fff;
+      }
+      td {
+        border: 5px solid #eee;
+        padding: 50px 50px 20px 20px;
+      }
+      h1 {
+        font-size: 25px;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 5px;
+        padding-left: 4px;
+      }
+      img {
+        display: inline-block;
+        /*border: 1px solid #555;*/
+      }
+    </style>
+  </head>
+  <body>
+    <h1>STORM Logo variations</h1>
+    <table>
+      <tr>
+        <td colspan="2">
+          <img src="{{ url_for('static', filename='images/logo/logo.color.large.svg') }}" />
+          <img src="{{ url_for('static', filename='images/logo/logo.wireframe.large.svg') }}" />
+          <img src="{{ url_for('static', filename='images/logo/logo.guides.large.svg') }}" />
+          <span style="padding-left: 70px"></span>
+          <img src="{{ url_for('static', filename='images/logo/logo.blueprint.large.svg') }}" />
+        </td>
+      </tr>
+      <tr>
+        <td rowspan="2">
+          <img src="{{ url_for('static', filename='images/logo/logo.color.medium.svg') }}" />
+          <img src="{{ url_for('static', filename='images/logo/logo.wireframe.medium.svg') }}" />
+          <img src="{{ url_for('static', filename='images/logo/logo.guides.medium.svg') }}" />
+        </td>
+        <td>
+          <img src="{{ url_for('static', filename='images/logo/logo.color.small.svg') }}" />
+          <img src="{{ url_for('static', filename='images/logo/logo.wireframe.small.svg') }}" />
+          <img src="{{ url_for('static', filename='images/logo/logo.guides.small.svg') }}" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <img src="{{ url_for('static', filename='images/logo/logo.color.icon.svg') }}" />
+          <img src="{{ url_for('static', filename='images/logo/logo.wireframe.icon.svg') }}" />
+          <img src="{{ url_for('static', filename='images/logo/logo.guides.icon.svg') }}" />
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

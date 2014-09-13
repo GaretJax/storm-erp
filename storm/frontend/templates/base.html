@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="{% block html_classes %}no-js {{ html_classes }}{% endblock %}" id="{{ html_id }}"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+    <title>{{ pagetitle }} ∙ STORM</title>
+
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/master.css') }}"/>
+    {% if config.DEBUG -%}
+    <script type="text/javascript" src="http://localhost:35729/livereload.js"></script>
+    {% endif -%}
+    {% block extrahead %}{% endblock %}
+    <script src="{{ url_for('static', filename='scripts/vendor/modernizr-2.8.3.min.js') }}"></script>
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+    <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+    <![endif]-->
+
+    {# TODO: Move these somewhere more appropriate #}
+    {% macro icon(name) -%}
+      <i class="fa fa-{{ name }}"></i>
+    {%- endmacro %}
+
+    {% block body %}
+    <header class="navbar navbar-default navbar-fixed-top">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          {% block pagehead %}<a class="navbar-brand" href="/">
+            <img src="{{ url_for('static', filename='images/logo/logo.color.icon.svg') }}" />
+          </a>{% endblock %}
+        </div>
+
+        <div class="navbar-collapse collapse" id="main-navbar">
+          <ul class="nav navbar-nav navbar-left">
+            {% block navitems %}
+              {% if menu %}
+                {% for item in menu %}
+                  {{ item }}
+                {% endfor %}
+              {% endif %}
+            {% endblock %}
+          </ul>
+        </div>
+    </header>
+
+    {% block sidebar_container %}
+    <aside class="sidebar">
+      {% block sidebar %}
+        {% if sidebar_menu %}
+          <ul class="nav">
+            {% for item in sidebar_menu %}
+              {{ item }}
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endblock %}
+    </aside>
+    {% endblock %}
+
+    <div class="container-fluid">
+      {% include "_messages.html" %}
+
+      {% block content %}{% endblock %}
+
+      <footer>
+        <ul class="linklist">
+          <li>STORM {{ __version__ }} ({{ __commit__[:7] }})</li>
+          {#<li><a href="{{ url_for('docs_index') }}">Documentation</a></li>
+          <li><a href="{{ url_for('feedback', next=request.url) }}" class="overlay-form">Feedback</a></li>#}
+        </ul>
+        <p>Rendered in __EXECUTION_TIME__</p>
+        <p>Copyright &copy; 2014 Jonathan Stoppani.</p>
+      </footer>
+    </div>
+    {% endblock %}
+
+    {% block jslibs -%}
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/vendor/jquery-2.1.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/vendor/jquery-ui-1.11.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/vendor/jquery.nestedSortable.js') }}"></script>
+    {#<script type="text/javascript" src="{{ url_for('static', filename='scripts/vendor/select2.min.js') }}"></script>#}
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/vendor/bootstrap.min.js') }}"></script>
+    {%- endblock %}
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/master.js') }}"></script>
+  </body>
+</html>
+

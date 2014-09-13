@@ -1,0 +1,13 @@
+{% extends "logo.base.small.svg" %}
+
+{% block additional_styles %}
+  {{ super() }}
+	#type {
+		fill: #000;
+	}
+{% endblock %}
+
+{% block logo %}
+  {{ draw("guides", guides) }}
+  {{ draw("wireframe", wireframe) }}
+{% endblock %}

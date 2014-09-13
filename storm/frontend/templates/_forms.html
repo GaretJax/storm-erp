@@ -1,0 +1,40 @@
+{% macro checkbox(f, label=None) %}
+<div class="checkbox">
+	<label>
+		{{ f()|safe }}
+		{{ label|default(f.label.text, True) }}
+	</label>
+</div>
+{% endmacro %}
+
+{% macro field(f, text=None, inline=False, label=True, class='') %}
+<div class="form-group{% if f.errors %} has-error{% endif %}{% if f.flags.required %} required{% endif %} {{ class }}">
+	{% if label %}{{ f.label(text=text, class='sr-only' if inline else '') }}{% endif %}
+	{{ f(class='form-control' if f.widget.__class__.__name__ != 'FileInput', placeholder=f.label.text if inline or not label else '', **kwargs)|safe }}
+	{% if f.errors %}
+		<ul class="errors">
+		{% for error in f.errors %}
+			<li>{{ error }}</li>
+		{% endfor %}
+		</ul>
+	{% endif %}
+</div>
+{% endmacro %}
+
+{% macro hfield(f, text=None, field_width=10, label_width=None, grid_size='sm') -%}
+{% set label_width=label_width or 12 - field_width -%}
+<div class="form-group{% if f.errors %} has-error{% endif %}{% if f.flags.required %} required{% endif %}">
+	{{ f.label(text=text, class='col-{}-{}'.format(grid_size, label_width)) }}
+	<div class="col-{{ grid_size }}-{{ field_width }}">{{ f(class='form-control', **kwargs)|safe }}</div>
+	{%- if f.description %}
+	<span class="help-block col-{{ grid_size }}-offset-{{ label_width }} col-{{ grid_size }}-{{ 12 - label_width }}">{{ f.description }}</span>
+	{%- endif %}
+	{%- if f.errors %}
+		<ul class="errors col-{{ grid_size }}-offset-{{ label_width }} col-{{ grid_size }}-{{ 12 - label_width }}">
+		{% for error in f.errors %}
+			<li>{{ error }}</li>
+		{% endfor %}
+		</ul>
+	{%- endif %}
+</div>
+{%- endmacro %}

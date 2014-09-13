@@ -1,0 +1,5 @@
+{% extends "logo.base.small.svg" %}
+
+{% block logo %}
+	{{ draw("colors", planes) }}
+{% endblock %}

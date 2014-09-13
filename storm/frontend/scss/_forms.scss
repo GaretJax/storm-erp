@@ -1,0 +1,12 @@
+.form-narrow {
+	max-width: 700px;
+}
+
+.form-horizontal {
+	> .form-group:last-child {
+		margin-bottom: 0;
+	}
+	label {
+		margin-top: 8px;
+	}
+}

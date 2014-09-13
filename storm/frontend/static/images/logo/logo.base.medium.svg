@@ -1,0 +1,16 @@
+{% extends "logo.base.svg" %}
+
+{% set width=800 %}
+{% set height=1150 %}
+{% set ratio=3 %}
+
+{% block additional_styles %}
+	#type {
+		font-size: 70px;
+		text-anchor: end;
+	}
+{% endblock %}
+
+{% block type %}
+	<text x="200" y="0" dx="-22" id="type">STORM</text>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "logo.base.svg" %}
+
+{% set ratio=2 %}
+{% set width=800 %}
+{% set height=1150 %}
+
+{% block type %}
+  <g transform="translate(-20, 0)">
+    <path d="M 25 -58 L 0 -58 L 0 116" id="type-line"/>
+    <g transform="translate(18, 0)">
+      <text x="0" y="0" id="type">STORM</text>
+      <text y="30" id="slogan">
+        <tspan x="1" dy=".4em">OPERATIONAL</tspan>
+        <tspan x="1" dy="1.2em">RESOURCE</tspan>
+        <tspan x="1" dy="1.2em">MANAGEMENT</tspan>
+      </text>
+    </g>
+  </g>
+{% endblock %}

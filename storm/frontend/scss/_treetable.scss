@@ -1,0 +1,229 @@
+@include keyframes(pulsate) {
+	0% {background-color: rgba(yellow, .3);}
+	50% {background-color: white;}
+	100% {background-color: rgba(yellow, .3);}
+}
+
+
+ul.tree,
+ol.tree {
+	$indent: 22px;
+
+	margin: -21px 0 0 -7px;
+	padding: 21px 0 0 0;
+
+	.tree-row > ul,
+	.tree-row > ol {
+		padding: 0;
+		margin: 0;
+	}
+
+	&,
+	.tree-row > ol,
+	.tree-row > ul {
+		position: relative;
+
+		.tree-row {
+			padding: 0 0 0 $indent;
+			position: relative;
+
+			// Horizontal line
+			&:before {
+				display: block;
+				content: " ";
+				font-size: 0;
+				height: 1px;
+				background: #ddd;
+				position: absolute;
+				top: 18px;
+				left: $indent / 3;
+				width: $indent / 3 * 2;
+				z-index: 5;
+			}
+
+			// Vertical line
+			&:after {
+				display: block;
+				content: " ";
+				font-size: 0;
+				width: 1px;
+				background: #ddd;
+				position: absolute;
+				top: 1px;
+				left: $indent / 3;
+				bottom: 0;
+				z-index: 10;
+			}
+			&:last-child:after {
+				bottom: auto;
+				height: 18px;
+			}
+		}
+	}
+	> .tree-row:first-child:after {top: 18px;}
+	> .tree-row:first-child:last-child:after {content: none}
+	> .tree-row.leaf:first-child:last-child:before {content: none}
+
+	.tree-row {
+		display: block;
+		&.collapsed > ul,
+		&.collapsed > ol {
+			display: none;
+		}
+		&.collapsed > .toggle-children {
+			@extend .fa;
+			@extend .fa-plus-square;
+			@include border-radius(3px);
+			font-size: 0px;
+			&:before {
+				font-size: 13px;
+			}
+		}
+		&.expanded > .toggle-children {
+			@extend .fa;
+			@extend .fa-minus-circle;
+			font-size: 0px;
+
+			&:before {
+				font-size: 13px;
+			}
+		}
+	}
+
+	.toggle-children {
+		$size: 15px;
+		text-align: center;
+		@include box-sizing(border-box);
+		position: absolute;
+		left: $indent / 3 - $size / 2;
+		top: 18px - $size / 2;
+		display: block;
+		background: #eee;
+		width: $size;
+		height: $size;
+		border: 1px solid #bbb;
+		font-size: 0;
+		z-index: 100;
+		@include border-radius(40px);
+		color: #aaa;
+		text-decoration: none;
+
+		&:hover {
+			color: #777;
+		}
+	}
+
+	.tree-row.leaf .toggle-children {
+		display: none;
+	}
+
+	.element {
+		border: 1px solid #bbb;
+		padding: 0 0 0 14px;
+		position: relative;
+		margin: -1px 0;
+		background: #fff;
+		@include background(linear-gradient(bottom, #fff 1px, #f7f7f7 1px, #fff 20px));
+		@include display-flex;
+		justify-content: flex-end;
+
+		&:hover {
+			@include background(linear-gradient(bottom, #f9f9f9 1px, #eee 1px, #f9f9f9 20px));
+		}
+
+		> div {
+			@include flex(0 1 auto);
+			padding: 9px 12px 8px 12px;
+		}
+		> .tree-row-label {
+			@include flex(1 1 10em);
+		}
+		.handle {
+			width: 14px;
+			position: absolute;
+			background: #fff;
+			display: block;
+			cursor: move;
+			padding: 0;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			border-right: 1px solid #bbb;
+			background-image: inline-image('tree-drag-handle.png');
+		}
+	}
+
+	$levels: 12;
+	@for $i from 1 through $levels {
+		.tree-row.level-#{$i} .element .tree-row-label {
+			margin-right: ($levels - $i) * $indent;
+			//border: 1px solid red;
+		}
+		.tree-row.level-#{$i} .element .tree-row-label > div {
+			margin-right: -($levels - $i) * $indent;
+			//background: green;
+		}
+	}
+
+	// Sortable support
+	.tree-row.ui-sortable-helper {
+		> .toggle-children {
+			display: none !important;
+		}
+		&:before {
+			display: none !important;
+		}
+		&:after {
+			display: none !important;
+		}
+	}
+	.tree-row.sortable-hover.collapsed > .element {
+		@include animation(pulsate .5s);
+		@include animation-iteration-count(infinite);
+	}
+	.tree-row.sortable-active {
+		.element {
+			> * {
+				opacity: 0.5;
+			}
+			background: rgba(#f3f3f3, .2);
+		}
+	}
+	.element .status {
+		color: #777;
+		font-size: 0.9em;
+		padding-left: 1em;
+		font-style: italic;
+		padding-right: 3px;
+	}
+	.sortable-placeholder {
+		display: block;
+		position: relative;
+		&:first-child {
+			margin-top: -1px;
+		}
+		&:before,
+		&:after {
+			content: " ";
+			font-size: 0;
+			display: block;
+			position: absolute;
+			left: $indent;
+		}
+		&:before {
+			border: 5px solid transparent;
+			border-left-color: #2472dc;
+			margin-top: -4px;
+			width: 5px;
+			height: 1px;
+			z-index: 200;
+			margin-left: -1px;
+		}
+		&:after {
+			right: 0;
+			height: 1px;
+			background: #2472dc;
+			z-index: 200;
+		}
+	}
+}

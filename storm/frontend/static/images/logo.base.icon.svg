@@ -1,0 +1,29 @@
+{% extends "logo.base.svg" %}
+
+{% set view_box="0 0 2400 1150" %}
+{% set width="180px" %}
+{% set height="87px" %}
+
+{% block additional_styles %}
+	#wireframe {
+		stroke-width: 12;
+	}
+	#t1 {fill: #fff112;}
+	#t2 {fill: #f7e652;}
+	#t3 {fill: #fbd814;}
+	#t4 {fill: #fbd814;}
+
+	#b1 {fill: #ff5918;}
+	#b2 {fill: #fb762d;}
+	#b3 {fill: #fb982d;}
+	#b4 {fill: #fbba53;}
+	#b5 {fill: #fbba53;}
+
+	#type {
+		font-size: 230px;
+	}
+{% endblock %}
+
+{% block type %}
+	<text x="190" y="-430" dy="1em" id="type">STO{{ 2400/180 }}</text>
+{% endblock %}

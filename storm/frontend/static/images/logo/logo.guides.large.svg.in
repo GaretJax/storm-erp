@@ -1,0 +1,18 @@
+{% extends "logo.base.large.svg" %}
+
+{% block additional_styles %}
+	#type {
+		fill: #000;
+	}
+	#slogan {
+		fill: #000;
+	}
+	#type-line {
+		stroke: #000;
+	}
+{% endblock %}
+
+{% block logo %}
+  {{ draw("guides", guides) }}
+  {{ draw("wireframe", wireframe) }}
+{% endblock %}

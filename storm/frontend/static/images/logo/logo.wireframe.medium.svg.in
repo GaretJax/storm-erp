@@ -1,0 +1,21 @@
+{% extends "logo.base.medium.svg" %}
+
+{% block additional_styles %}
+	{{ super() }}
+	#wireframe {
+		stroke-width: 4;
+	}
+	#type {
+		fill: #000;
+	}
+	#slogan {
+		fill: #000;
+	}
+	#type-line {
+		stroke: #000;
+	}
+{% endblock %}
+
+{% block logo %}
+  {{ draw("wireframe", wireframe) }}
+{% endblock %}

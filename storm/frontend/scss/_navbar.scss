@@ -1,0 +1,190 @@
+.navbar {
+	$height: 70px;
+	background: #fff;
+	height: $height + 1px;
+	font-size: 13px;
+	border-bottom: 1px solid #a6a6a6;
+
+	@include box-shadow(rgba(#000, .2) 0px 0px 3px);
+
+	.navbar-header .navbar-brand {
+		font-size: 16px;
+		color: #2e2e2e;
+		font-weight: bold;
+		text-align: center;
+		width: $sidebar-width;
+		height: $height;
+		&:hover {
+			background: rgba(#ddd, .2);
+		}
+	}
+
+	.navbar-collapse > .navbar-nav {
+		height: $height;
+		background: #dadada;
+		padding-right: 1px;
+
+		.divider + .divider, .divider:first-child, .divider:last-child {
+			display: none;
+		}
+
+		> li {
+		}
+		> li > a {
+			color: #868686;
+			padding: ($height - 20px)/2 20px;
+			line-height: 20px;
+			margin: 0 1px;
+			background: #fff;
+			@include box-shadow(rgba(#fff, 1) 0px 0px 5px 1px inset);
+		}
+		> li:first-child a {
+			margin-right: 0;
+		}
+		> li + li {
+			margin-right: -1px;
+		}
+		> li:hover {
+			cursor: pointer;
+
+			@include background-image(
+				linear-gradient(top, #b0b0b0, #dddddd)
+			);
+		
+			> a {
+				border-top: 1px solid #bbbbbb;
+				padding-top: 24px;
+				color: #606060;
+				@include box-shadow(none);
+				@include background-image(
+					linear-gradient(top, #d4d4d4, #f7f7f7)
+				);
+			}
+			&.dropdown.open a {
+				border-top-color: transparent;
+			}
+		}
+		> li.active {
+			$active-color: #f9f9f9;
+			&:not(.open) > a {
+				background-color: $active-color;
+			}
+			& > a:before {
+				content: " ";
+				display: block;
+				position: absolute;
+				bottom: 0;
+				left: 10px;
+				right: 10px;
+				background-color: $active-color;
+				height: 15px;
+				z-index: 2;
+			}
+			&:after {
+				position: absolute;
+				display: block;
+				z-index: 1;
+				bottom: 0;
+				width: 15px;
+				height: 15px;
+				content: " ";
+				left: 50%;
+				border-bottom: 1px solid #a6a6a6;
+				border-left: 1px solid #a6a6a6;
+				background-color: $active-color;
+				@include transform-origin(50% 50%);
+				@include transform(
+					translateY(50%)
+					translateX(-50%)
+					rotate(-45deg)
+				);
+				//@include border-radius(20px);
+				@include box-shadow(
+					rgba(#000, .2) 0px 0px 3px
+				);
+			}
+			&:not(.open):hover {
+				& > a:before {
+					@include background-image(
+						linear-gradient(top, #ededed, #f7f7f7)
+					)
+				}
+				&:after {
+					@include background-image(
+						linear-gradient(top right, #f7f7f7 50%, #ffffff)
+					)
+				}
+			}
+			&.open {
+				& > a:before, &:after {
+					display: none
+				}
+			}
+		}
+		> li.dropdown.open {
+			//background-color: #a6a6a6;
+			@include background-image(none);
+
+			> a {
+				position: relative;
+				background: #fff;
+				color: #606060;
+				@include box-shadow(none);
+			}
+			> a:after {
+				height: 10px;
+				left: 0;
+				right: 0px;
+				background: #fff;
+				position: absolute;
+				z-index: 1001;
+				content: " ";
+				display: block;
+				bottom: -1px;
+			}
+			&:last-child > a:after {
+				right: 0px;
+			}
+			.dropdown-menu {
+				border-top-color: #a6a6a6;
+			}
+		}
+		> li.account, > li.account:hover {
+			//background-color: #a6a6a6;
+			@include background-image(none);
+			> a {
+				color: #2e2e2e;
+				font-weight: bold;
+				padding: 5px 20px;
+				line-height: 40px;
+				border-top: none;
+				background: #fff;
+			}
+			&.open > a {
+				color: #2e2e2e;
+			}
+			.caret {
+				vertical-align: 5%;
+			}
+			img.avatar {
+				width: 30px;
+				height: 30px;
+				margin: -2px 10px 0 -2px;
+				@include border-radius(40px);
+			}
+		}
+		.caret {
+			vertical-align: 10%;
+			color: rgba(#666, .5);
+		}
+	}
+	.dropdown-menu {
+		min-width: 100%;
+		a {
+			font-size: 13px;
+		}
+		.dropdown-header {
+			font-size: 11px;
+		}
+	}
+}

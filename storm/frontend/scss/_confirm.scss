@@ -1,0 +1,32 @@
+.confirmation-dialog {
+	max-width: 600px;
+	padding-top: 30px !important;
+	margin-left: auto;
+	margin-right: auto;
+
+	p {
+		font-size: 1.2em;
+	}
+
+	form {
+		border-top: 1px solid #ccc;
+		margin: 30px -30px -20px -30px;
+		padding: 20px 30px;
+		text-align: right;
+		background: #f3f3f3;
+		@include border-bottom-radius(4px);
+
+		.btn + .btn {
+			margin-left: 15px;
+		}
+
+		.btn-default {
+			background: rgba(#fff, .5);
+			border-color: #999;
+
+			&:hover {
+				background: #fff;
+			}
+		}
+	}
+}

@@ -1,0 +1,23 @@
+// Libraries
+@import "compass";
+@import "compass/css3";
+@import "bootstrap";
+@import "font-awesome-compass";
+@import "font-awesome";
+
+// Main elements
+@import "base";
+@import "navbar";
+@import "forms";
+@import "confirm";
+
+// Modules
+@import "treetable";
+//@import "buttons";
+
+.categories-tree .element {
+	> .delete {
+		@include flex(0 0 8em);
+		text-align: right;
+	}
+}

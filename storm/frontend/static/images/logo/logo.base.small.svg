@@ -1,0 +1,19 @@
+{% extends "logo.base.svg" %}
+
+{% block additional_styles %}
+	#wireframe {
+		stroke-width: 5;
+	}
+	#type {
+		text-anchor: middle;
+		font-size: 116px;
+	}
+{% endblock %}
+
+{% set width=800 %}
+{% set height=1150 %}
+{% set ratio=6 %}
+
+{% block type %}
+	<text x="0" dx="0" y="25" dy="1em" id="type">STORM</text>
+{% endblock %}
