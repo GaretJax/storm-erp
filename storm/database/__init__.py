@@ -8,6 +8,8 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from storm.config import settings
 
 
+NULL = None  # Make is null queries more explicit (and pep8 happy)
+
 _engine = None
 
 

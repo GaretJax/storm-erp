@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship, backref, object_session
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
 
-from storm.database import mptt
+from storm.database import mptt, NULL
 
 
 Model = declarative_base()
@@ -88,10 +88,11 @@ class Warehouse(Location):
     __tablename__ = 'storm_stock_warehouse'
     __table_args__ = tuple()
 
-    id = sa.Column(sa.Integer,
-                   sa.ForeignKey(Location.id, onupdate='CASCADE',
-                                 ondelete='CASCADE'),
-                   primary_key=True)
+    id = sa.Column(
+        sa.Integer,
+        sa.ForeignKey(Location.id, onupdate='CASCADE', ondelete='CASCADE'),
+        primary_key=True
+    )
 
     __mapper_args__ = {
         'polymorphic_identity': 'warehouse',

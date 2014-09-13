@@ -7,13 +7,13 @@ from fabric.api import task, local, env
 
 @task
 def watch_styles():
-    config = os.path.join(env.assets_dir, 'sass', 'config.rb')
+    config = os.path.join(env.assets_dir, 'scss', 'config.rb')
     local('compass watch -c {}'.format(config))
 
 
 @task
 def compile_styles():
-    config = os.path.join(env.assets_dir, 'sass', 'config.rb')
+    config = os.path.join(env.assets_dir, 'scss', 'config.rb')
     local('compass compile -c {}'.format(config))
 
 
@@ -34,10 +34,8 @@ def compile_scripts():
 @task
 def livereload():
     url = 'http://dev:35729/livereload.js'
-    print (
-        'To livereload your web pages add the following script tag to '
-        'your HTML:'
-    )
+    print('To livereload your web pages add the following script tag to '
+          'your HTML:')
     print()
     print('    <script type="text/javascript" src="{}"></script>'.format(url))
     print()

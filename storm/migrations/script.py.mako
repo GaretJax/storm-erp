@@ -13,7 +13,7 @@ down_revision = ${repr(down_revision)}
 
 from alembic import op  # NOQA
 import sqlalchemy as sa  # NOQA
-from storm.migrations import lib  # NOQA
+from storm.migrations import NULL, lib  # NOQA
 ${imports if imports else ""}
 
 def upgrade():

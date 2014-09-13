@@ -13,7 +13,7 @@ down_revision = '22e91d7248e'
 
 from alembic import op  # NOQA
 import sqlalchemy as sa  # NOQA
-from storm.migrations import lib  # NOQA
+from storm.migrations import NULL, lib  # NOQA
 
 
 def upgrade():
