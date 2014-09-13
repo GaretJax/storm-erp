@@ -80,6 +80,7 @@ def release():
     local('git push --tags origin master')
 
     # Package and upload to pypi
+    local('git show-ref -s > storm/COMMIT')
     local('python setup.py sdist bdist_wheel upload')
 
 
