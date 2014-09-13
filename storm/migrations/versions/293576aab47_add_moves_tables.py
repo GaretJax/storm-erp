@@ -43,8 +43,16 @@ def upgrade():
         sa.Column('quantity', sa.Numeric(18, 6), nullable=False),
         sa.Column('scheduled', sa.Boolean(), default=False),
         sa.Column('executed', sa.Boolean(), default=False),
-        sa.UniqueConstraint('batch_id', 'source_location_id',
-                            'target_location_id', 'stock_unit_id', 'lot_id'),
+        sa.Index('batch_id_wo_lot',
+                 'source_location_id', 'target_location_id',
+                 'stock_unit_id', 'lot_id',
+                 postgresql_where=sa.text('lot_id IS NOT NULL'),
+                 unique=True),
+        sa.Index('batch_id_w_lot',
+                 'source_location_id', 'target_location_id',
+                 'stock_unit_id',
+                 postgresql_where=sa.text('lot_id IS NULL'),
+                 unique=True),
     )
 
     op.create_table(

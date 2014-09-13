@@ -18,6 +18,7 @@ class Location(mptt.MPTTBase, Model):
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.Unicode, nullable=False)
     type = sa.Column(sa.String(50), nullable=True)
+    sort_order = sa.Column(sa.Integer, nullable=False, server_default='0')
 
     __mapper_args__ = {
         'polymorphic_identity': None,
@@ -242,15 +243,16 @@ class Move(Model):
     lot = relationship(Lot, backref=backref('moves'))
 
     __table_args__ = (
-        sa.UniqueConstraint('batch_id',
-                            'source_location_id', 'target_location_id',
-                            'stock_unit_id', 'lot_id'),
-        #                    postgresql_where=lot != None),
-        # sa.UniqueConstraint('batch_id',
-        #                    'source_location_id', 'target_location_id',
-        #                    'stock_unit_id',
-        #                    postgresql_where=lot == None),
-        # https://bitbucket.org/zzzeek/sqlalchemy/issue/3161/
+        sa.Index('batch_id',
+                 'source_location_id', 'target_location_id',
+                 'stock_unit_id', 'lot_id',
+                 postgresql_where=lot != NULL,
+                 unique=True),
+        sa.Index('batch_id',
+                 'source_location_id', 'target_location_id',
+                 'stock_unit_id',
+                 postgresql_where=lot == NULL,
+                 unique=True),
     )
 
 

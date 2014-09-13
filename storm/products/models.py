@@ -18,6 +18,7 @@ class Category(mptt.MPTTBase, Model):
     name = sa.Column(sa.Unicode(120), nullable=False)
     description = sa.Column(sa.Text)
     is_active = sa.Column(sa.Boolean, nullable=False, default=False)
+    sort_order = sa.Column(sa.Integer, nullable=False, server_default='0')
 
 
 class Product(Model):
@@ -28,7 +29,7 @@ class Product(Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     upc = sa.Column(sa.String(128), unique=True, nullable=False)
-    ean13 = sa.Column(sa.Integer, unique=True)
+    ean13 = sa.Column(sa.BigInteger, unique=True)
     is_active = sa.Column(sa.Boolean, nullable=False, default=False)
     type = sa.Column(sa.String(50), nullable=True)
 

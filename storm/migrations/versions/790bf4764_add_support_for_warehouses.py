@@ -31,4 +31,5 @@ def upgrade():
 
 
 def downgrade():
+    op.drop_table('storm_stock_warehouse')
     op.drop_column('storm_stock_location', 'type')

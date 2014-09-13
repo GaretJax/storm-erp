@@ -21,7 +21,7 @@ def upgrade():
         'storm_product_product',
         sa.Column('id', sa.Integer(), primary_key=True),
         sa.Column('upc', sa.String(128), unique=True, nullable=False),
-        sa.Column('ean13', sa.Integer(), unique=True),
+        sa.Column('ean13', sa.BigInteger(), unique=True),
         sa.Column('active', sa.Boolean(), nullable=False, default=False),
         sa.Column('type', sa.String(50), nullable=True),
         sa.Column('name', sa.Unicode(120), nullable=False),
