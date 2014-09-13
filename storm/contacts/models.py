@@ -7,14 +7,14 @@ from sqlalchemy.ext.declarative import declarative_base, declared_attr
 Model = declarative_base()
 
 
-class Entity(Model):
+class Contact(Model):
     """
-    Base class to represent entities.
+    Base class to represent contacts.
     """
-    __tablename__ = 'storm_entity_entity'
+    __tablename__ = 'storm_contact_contact'
 
     id = sa.Column(sa.Integer, primary_key=True)
-    entity_type = sa.Column(sa.String(50), nullable=False)
+    contact_type = sa.Column(sa.String(50), nullable=False)
 
     reference = sa.Column(sa.String(64), unique=True, nullable=True)
 
@@ -27,20 +27,20 @@ class Entity(Model):
     # TODO: Add a picture field
 
     __mapper_args__ = {
-        'polymorphic_identity': None,
-        'polymorphic_on': entity_type,
+        'polymorphic_idcontact': None,
+        'polymorphic_on': contact_type,
     }
 
 
-class Organization(Entity):
-    __tablename__ = 'storm_entity_organization'
+class Organization(Contact):
+    __tablename__ = 'storm_contact_organization'
     __mapper_args__ = {
-        'polymorphic_identity': 'organization',
+        'polymorphic_idcontact': 'organization',
     }
 
     id = sa.Column(
         sa.Integer,
-        sa.ForeignKey(Entity.id, onupdate='CASCADE', ondelete='CASCADE'),
+        sa.ForeignKey(Contact.id, onupdate='CASCADE', ondelete='CASCADE'),
         primary_key=True
     )
 
@@ -48,15 +48,15 @@ class Organization(Entity):
     type = sa.Column(sa.Unicode(32))
 
 
-class Person(Entity):
-    __tablename__ = 'storm_entity_person'
+class Person(Contact):
+    __tablename__ = 'storm_contact_person'
     __mapper_args__ = {
-        'polymorphic_identity': 'person',
+        'polymorphic_idcontact': 'person',
     }
 
     id = sa.Column(
         sa.Integer,
-        sa.ForeignKey(Entity.id, onupdate='CASCADE', ondelete='CASCADE'),
+        sa.ForeignKey(Contact.id, onupdate='CASCADE', ondelete='CASCADE'),
         primary_key=True
     )
 
@@ -68,54 +68,54 @@ class Person(Entity):
     position = sa.Column(sa.Unicode(128), nullable=True)
 
 
-class EntityAttributeBase(Model):
+class ContactAttributeBase(Model):
     __abstract__ = True
 
     id = sa.Column(sa.Integer, primary_key=True)
     label = sa.Column(sa.Unicode(255), nullable=False)
 
     @declared_attr
-    def entity_id(cls):
-        return sa.Column(sa.Integer, sa.ForeignKey(Entity.id))
+    def contact_id(cls):
+        return sa.Column(sa.Integer, sa.ForeignKey(Contact.id))
 
 
-def make_entity_attribute(label):
-    class EntityAttribute(EntityAttributeBase):
+def make_contact_attribute(label):
+    class ContactAttribute(ContactAttributeBase):
         __abstract__ = True
 
         # Adding the constrain in the base class causes SAWarning to be
         # emitted, so we have to do this here.
         __table_args__ = (
-            sa.UniqueConstraint('entity_id', 'label'),
+            sa.UniqueConstraint('contact_id', 'label'),
         )
 
         @declared_attr
-        def entity(cls):
-            return relationship(Entity, backref=backref(
+        def contact(cls):
+            return relationship(Contact, backref=backref(
                 label,
                 collection_class=attribute_mapped_collection('label'),
             ))
 
         @declared_attr
         def __tablename__(cls):
-            return 'storm_entity_{}'.format(label)
+            return 'storm_contact_{}'.format(label)
 
-    return EntityAttribute
+    return ContactAttribute
 
 
-class PhoneNumber(make_entity_attribute('phone_numbers')):
+class PhoneNumber(make_contact_attribute('phone_numbers')):
     number = sa.Column(sa.String(64), nullable=False)
 
 
-class EmailAddress(make_entity_attribute('email_addresses')):
+class EmailAddress(make_contact_attribute('email_addresses')):
     email = sa.Column(sa.Unicode(255), nullable=False)
 
 
-class WebAddress(make_entity_attribute('web_addresses')):
+class WebAddress(make_contact_attribute('web_addresses')):
     url = sa.Column(sa.String(255), nullable=False)
 
 
-class Address(make_entity_attribute('addresses')):
+class Address(make_contact_attribute('addresses')):
     addressee = sa.Column(sa.Unicode(255), nullable=True)
     street1 = sa.Column(sa.Unicode(255), nullable=False)
     street2 = sa.Column(sa.Unicode(255), nullable=True)
