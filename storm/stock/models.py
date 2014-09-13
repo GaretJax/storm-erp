@@ -55,8 +55,8 @@ class Location(mptt.MPTTBase, Model):
         if virtual:
             moves_query = (session.query(sa.func.sum(Move.quantity))
                            .filter((Move.stock_unit == stock_unit) &
-                                   (Move.scheduled == True) &  # NOQA
-                                   (Move.executed == False)))
+                                   (Move.is_scheduled == True) &  # NOQA
+                                   (Move.is_executed == False)))
 
             if lot:
                 moves_query = moves_query.filter(Move.lot == lot)
@@ -156,7 +156,7 @@ class Batch(Model):
         Schedule the moves belonging to this batch by assigning concrete
         locations and lots.
         """
-        self.moves.update({'scheduled': True}, synchronize_session='fetch')
+        self.moves.update({'is_scheduled': True}, synchronize_session='fetch')
 
     def apply(self):
         """
@@ -166,7 +166,7 @@ class Batch(Model):
 
         with session.begin_nested():
             for m in self.moves:
-                assert m.scheduled
+                assert m.is_scheduled
                 if not m.quantity:  # NOCOV
                     continue
 
@@ -199,7 +199,8 @@ class Batch(Model):
                     ))
 
                 session.flush()
-            self.moves.update({'executed': True}, synchronize_session='fetch')
+            self.moves.update({'is_executed': True},
+                              synchronize_session='fetch')
             session.query(Quant).filter(Quant.quantity == 0).delete()
 
 
