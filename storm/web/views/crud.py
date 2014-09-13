@@ -1,4 +1,4 @@
-from flask import abort, render_template, redirect, url_for
+from flask import abort, render_template, redirect, url_for, flash
 from flask.views import View
 
 from storm.database import session
@@ -31,15 +31,57 @@ class ListView(TemplateView):
         return self.render(object_list=self.get_objects())
 
 
-class DeleteView(TemplateView):
+class SingleObjectMixin:
     model = None
-    redirect_endpoint = None
 
     def get_object(self, object_id):
         obj = session.query(self.model).get(object_id)
         if not obj:
             abort(404)
         return obj
+
+
+class EditView(SingleObjectMixin, TemplateView):
+    model = None
+    form_class = None
+
+    def get_form(self, **kwargs):
+        return self.form_class(**kwargs)
+
+    def get_success_url(self):
+        raise NotImplementedError
+
+    def save_changes(self, form, object):
+        form.populate_obj(object)
+        return redirect(self.get_success_url())
+
+    def create_object(self, form, object):
+        form.populate_obj(object)
+        session.add(object)
+        return redirect(self.get_success_url())
+
+    def dispatch_request(self, object_id=None):
+        is_editing = object_id is not None
+
+        if is_editing:
+            object = self.get_object(object_id)
+            form = self.get_form(obj=object)
+        else:
+            object = self.model()
+            form = self.get_form()
+
+        if form.validate_on_submit():
+            if is_editing:
+                return self.save_changes(form, object)
+            else:
+                return self.create_object(form, object)
+
+        return self.render(is_editing=is_editing, form=form, object=object)
+
+
+class DeleteView(SingleObjectMixin, TemplateView):
+    model = None
+    redirect_endpoint = None
 
     def dispatch_request(self, object_id):
         obj = self.get_object(object_id)

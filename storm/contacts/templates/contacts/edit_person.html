@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% set pagetitle='Edit organization' if is_editing else 'Add a new organization' %}
+
+{% from "_forms.html" import hfield, checkbox %}
+
+{% block content %}
+  <h1>{{ pagetitle }}</h1>
+
+  <main>
+    <form class="form-horizontal form-narrow" role="form" method="post">
+      {{ form.csrf_token }}
+
+      {{ hfield(form.title, 'Title') }}
+      {{ hfield(form.last_name, 'Last name') }}
+      {{ hfield(form.first_name, 'First name') }}
+      {{ hfield(form.position, 'Position') }}
+      {{ hfield(form.organization, 'Organization') }}
+
+      {{ hfield(form.reference, 'Reference') }}
+
+      <div class="form-group">
+        <div class="row-label col-sm-2">Roles</div>
+        <div class="col-sm-3">
+          {{ checkbox(form.is_customer, 'Customer') }}
+        </div>
+        <div class="col-sm-7">
+          {{ checkbox(form.is_supplier, 'Supplier') }}
+        </div>
+      </div>
+      {{ hfield(form.note, 'Internal notes') }}
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button class="btn btn-primary">{{ 'Apply changes' if is_editing else 'Create' }}</button>
+          <a class="btn btn-link" href="#">Cancel</a>
+          {% if is_editing %}<button class="btn btn-danger pull-right">Delete</button>{% endif %}
+        </div>
+      </div>
+    </form>
+  </main>
+{% endblock %}

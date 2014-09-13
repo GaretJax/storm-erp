@@ -2,6 +2,7 @@ import sqlalchemy as sa
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 Model = declarative_base()
@@ -15,19 +16,26 @@ class Contact(Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     contact_type = sa.Column(sa.String(50), nullable=False)
+    _name = sa.Column('name', sa.Unicode(255), nullable=False)
 
     reference = sa.Column(sa.String(64), unique=True, nullable=True)
 
-    is_customer = sa.Column(sa.Boolean, server_default='0', nullable=False)
-    is_supplier = sa.Column(sa.Boolean, server_default='0', nullable=False)
+    is_customer = sa.Column(sa.Boolean, server_default='0',
+                            default=False, nullable=False)
+    is_supplier = sa.Column(sa.Boolean, server_default='0',
+                            default=False, nullable=False)
     is_active = sa.Column(sa.Boolean, server_default='0', nullable=False)
 
     note = sa.Column(sa.Text, nullable=True)
 
     # TODO: Add a picture field
 
+    @hybrid_property
+    def name(self):
+        return self._name
+
     __mapper_args__ = {
-        'polymorphic_idcontact': None,
+        'polymorphic_identity': None,
         'polymorphic_on': contact_type,
     }
 
@@ -35,7 +43,7 @@ class Contact(Model):
 class Organization(Contact):
     __tablename__ = 'storm_contact_organization'
     __mapper_args__ = {
-        'polymorphic_idcontact': 'organization',
+        'polymorphic_identity': 'organization',
     }
 
     id = sa.Column(
@@ -44,14 +52,21 @@ class Organization(Contact):
         primary_key=True
     )
 
-    name = sa.Column(sa.Unicode(255), nullable=False)
-    type = sa.Column(sa.Unicode(32))
+    type = sa.Column(sa.Unicode(32), nullable=True)
+
+    @hybrid_property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = value
 
 
 class Person(Contact):
     __tablename__ = 'storm_contact_person'
     __mapper_args__ = {
-        'polymorphic_idcontact': 'person',
+        'polymorphic_identity': 'person',
     }
 
     id = sa.Column(
@@ -61,11 +76,36 @@ class Person(Contact):
     )
 
     title = sa.Column(sa.Unicode(32), nullable=True)
-    first_name = sa.Column(sa.Unicode(255))
-    last_name = sa.Column(sa.Unicode(255))
+    _first_name = sa.Column('first_name', sa.Unicode(255))
+    _last_name = sa.Column('last_name', sa.Unicode(255))
     organization_id = sa.Column(sa.Integer, sa.ForeignKey(Organization.id),
                                 nullable=True)
     position = sa.Column(sa.Unicode(128), nullable=True)
+
+    organization = relationship(Organization, backref=backref('contacts'),
+                                foreign_keys=[organization_id])
+
+    @hybrid_property
+    def first_name(self):
+        return self._first_name
+
+    @first_name.setter
+    def first_name(self, val):
+        self._first_name = val
+        self._name = self.name
+
+    @hybrid_property
+    def last_name(self):
+        return self._last_name
+
+    @last_name.setter
+    def last_name(self, val):
+        self._last_name = val
+        self._name = self.name
+
+    @hybrid_property
+    def name(self):
+        return (self._first_name or '') + ' ' + (self._last_name or '')
 
 
 class ContactAttributeBase(Model):

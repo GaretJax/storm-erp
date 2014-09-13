@@ -21,6 +21,7 @@ def upgrade():
         'storm_contact_contact',
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('contact_type', sa.String(length=50), nullable=False),
+        sa.Column('name', sa.Unicode(length=255), nullable=False),
         sa.Column('reference', sa.String(length=64), nullable=True),
         sa.Column('is_customer', sa.Boolean(), server_default='0',
                   nullable=False),
@@ -36,7 +37,6 @@ def upgrade():
     op.create_table(
         'storm_contact_organization',
         sa.Column('id', sa.Integer(), nullable=False),
-        sa.Column('name', sa.Unicode(length=255), nullable=False),
         sa.Column('type', sa.Unicode(length=32), nullable=True),
         sa.ForeignKeyConstraint(['id'], ['storm_contact_contact.id'],
                                 onupdate='CASCADE', ondelete='CASCADE'),

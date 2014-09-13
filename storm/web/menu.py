@@ -50,7 +50,7 @@ class MenuItem(RawMenuItem):
         super().__init__(label, lambda: url_for(url), template)
 
 
-class GroupedItems(object):
+class GroupedItems:
     def __init__(self, label, items=None, template='menu/_group.html'):
         self.label = label
         self.template = template

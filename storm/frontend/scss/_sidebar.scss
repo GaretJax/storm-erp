@@ -1,0 +1,24 @@
+.sidebar {
+	.nav {
+		.divider {
+			font-size: 0;
+			border-bottom: 1px solid #ddd;
+			margin: 20px 20px;
+		}
+		.divider:first-child,
+		.divider:last-child,
+		.divider + .divider {
+			display: none;
+		}
+		.dropdown-header {
+			font-weight: 600;
+			font-size: 0.8em;
+			margin-bottom: 4px;
+			text-transform: uppercase;
+		}
+
+		> li > a {
+			padding: 6px 20px;
+		}
+	}
+}

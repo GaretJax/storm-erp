@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% set pagetitle=scope.titlecase() if scope else 'Contacts' %}
+
+{% block content %}
+  <h1>{{ pagetitle }}</h1>
+  <main>
+  <div class="full-width-table">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>REF</th>
+          <th>Name</th>
+          <th>Customer / Supplier</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in object_list %}
+          <tr>
+            <td>{{ c.reference or '' }}</td>
+            {% if c.contact_type == 'organization' %}
+              <td><a href="{{ url_for('.edit_organization', object_id=c.id) }}"><strong>{{ c.name }}</strong></a></td>
+            {% elif c.contact_type == 'person' %}
+              <td><a href="{{ url_for('.edit_person', object_id=c.id) }}"><strong>{{ c.last_name }}</strong> {{ c.first_name }}</a> <span class="text-muted">— {{ c.organization.name }}</span></td>
+            {% endif %}
+            <td>
+              <input type="checkbox" {% if c.is_customer %} checked="checked"{% endif %} /> /
+              <input type="checkbox" {% if c.is_supplier %} checked="checked"{% endif %} />
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  </main>
+{% endblock %}
+

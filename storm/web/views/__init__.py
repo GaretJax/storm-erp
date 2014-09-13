@@ -1,6 +1,6 @@
-from .crud import DeleteView, ListView
+from .crud import DeleteView, ListView, EditView
 
-__all__ = ['DeleteView', 'ListView', 'SidebarMixin']
+__all__ = ['DeleteView', 'EditView', 'ListView', 'SidebarMixin']
 
 
 class SidebarMixin:
