@@ -68,3 +68,47 @@ def siblings(node, include_self=False):
         pk = class_mapper(node.__class__).primary_key[0]
         query = query & (pk != node.id)
     return query
+
+
+class NestedSetOrganizer:
+    def __init__(self, objects):
+        self.objects = objects
+        self.grouped = {}
+        self.roots = []
+        self._organized = False
+
+    def organize(self):
+        self.grouped = {}
+        self.roots = []
+        for o in self.objects:
+            if o.parent_id:
+                self.grouped.setdefault(o.parent_id, []).append(o)
+            else:
+                self.roots.append(o)
+        self._organized = True
+
+    def _entry(self, obj):
+        return obj, self.is_branch(obj), self.children(obj)
+
+    def __iter__(self):
+        if not self._organized:
+            self.organize()
+        for o in self.roots:
+            yield self._entry(o)
+
+    def is_leaf(self, obj):
+        assert self._organized
+        return not self.is_leaf(obj)
+
+    def is_branch(self, obj):
+        assert self._organized
+        return bool(self.grouped.get(obj.id, False))
+
+    def children(self, obj):
+        assert self._organized
+        for o in self.grouped.get(obj.id, []):
+            yield self._entry(o)
+
+
+def organize(query):
+    return NestedSetOrganizer(query)
