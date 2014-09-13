@@ -20,6 +20,12 @@ class Category(mptt.MPTTBase, Model):
     is_active = sa.Column(sa.Boolean, nullable=False, default=False)
     sort_order = sa.Column(sa.Integer, nullable=False, server_default='0')
 
+    def path(self):
+        path = self.name
+        if self.parent:
+            path = '{} / {}'.format(self.parent.path(), path)
+        return path
+
 
 class Product(Model):
     """

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% set pagetitle='Edit product' if edit else 'Add a new product' %}
+
+{% from "_forms.html" import hfield %}
+
+{% block content %}
+  <h1>{{ pagetitle }}</h1>
+
+  <main>
+    <form class="form-horizontal form-narrow" role="form" method="post">
+      {{ form.csrf_token }}
+      {{ hfield(form.name, 'Name') }}
+      {{ hfield(form.upc, 'Product code') }}
+      {{ hfield(form.ean13, 'EAN 13') }}
+      {{ hfield(form.description, 'Description') }}
+      {{ hfield(form.categories, 'Categories') }}
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button class="btn btn-primary">{{ 'Apply changes' if edit else 'Create' }}</button>
+          <a class="btn btn-link" href="#">Cancel</a>
+          {% if edit %}<button class="btn btn-danger pull-right">Delete</button>{% endif %}
+        </div>
+      </div>
+    </form>
+  </main>
+{% endblock %}
+

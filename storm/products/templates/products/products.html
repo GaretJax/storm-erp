@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% set pagetitle='Products management' %}
+
+{% block content %}
+  <h1>{{ pagetitle }}</h1>
+  <main>
+  <div class="full-width-table">
+    <table class="table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Product</th>
+          <th>Unique Product Code (UPC)</th>
+          <th>EAN 13</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in object_list %}
+          <tr>
+            <td><input type="checkbox"{% if p.is_active %} checked="checked"{% endif %}/></td>
+            <td><a href="{{ url_for('.edit_product', product_id=p.id) }}">{{ p.name }}</a></td>
+            <td>{{ p.upc }}</td>
+            <td>{{ p.ean13 or '<span class="text-muted">n/d</span>'|safe }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  </main>
+{% endblock %}
