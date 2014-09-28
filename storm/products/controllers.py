@@ -6,7 +6,6 @@ from storm.web.views import DeleteView, ListView, SidebarMixin, EditView
 
 from . import models, forms
 from .menu import main_menu_item, products_menu
-from .menu import stock_menu_item  # TODO: Move to its own module
 
 
 products_frontend = Blueprint('products', __name__,
@@ -16,7 +15,6 @@ products_frontend = Blueprint('products', __name__,
 @products_frontend.record_once
 def register_menuitem(state):
     state.app.main_menu.add(main_menu_item)
-    state.app.main_menu.add(stock_menu_item)
 
 
 class ListCategories(SidebarMixin, ListView):
@@ -78,6 +76,7 @@ def move_category():
         form.save()
         return 'OK'
     else:
+        print(form.errors)
         abort(400)
 
 

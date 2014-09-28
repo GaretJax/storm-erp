@@ -1,24 +1,8 @@
 {% extends "base.html" %}
+{% from "_trees.html" import tree %}
 
 {% set pagetitle='Product categories' %}
 
-
-{% macro tree(objects, class='', id='') %}
-  {% for obj, is_branch, children in objects recursive  %}
-    <li data-id="{{ obj.id }}" class="tree-row level-{{ loop.depth }}{% if is_branch %} collapsed branch{% else %} leaf{% endif %}">
-      <a class="toggle-children" href="#">Expand</a>
-      <div class="element">
-        <span class="handle"></span>
-        {{ caller(obj) }}
-      </div>
-      {% if is_branch %}
-        <ol>
-          {{ loop(children) }}
-        </ol>
-      {% endif %}
-    </li>
-  {% endfor %}
-{% endmacro %}
 
 {% block content %}
   <h1>{{ pagetitle }}</h1>

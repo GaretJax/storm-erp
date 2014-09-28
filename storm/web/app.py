@@ -137,6 +137,7 @@ def create_app():
     blueprints = [
         ('storm.contacts.controllers.contacts_frontend', '/contacts'),
         ('storm.products.controllers.products_frontend', '/products'),
+        ('storm.stock.controllers.stock_frontend', '/stock'),
     ]
 
     for bp_path, url_prefix in blueprints:

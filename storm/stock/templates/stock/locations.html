@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "_trees.html" import tree %}
+
+{% set pagetitle='Locations' %}
+
+
+{% block content %}
+  <h1>{{ pagetitle }}</h1>
+  <main>
+    <ol class="tree tree-sortable locations-tree" data-sorting-endpoint="{{ url_for('.move_location') }}">
+      {% call(location) tree(object_list) %}
+        <div class="tree-row-label">
+          <div>
+            <a href="{{ url_for('.edit_location', object_id=location.id) }}">{{ location.name }}</a>
+            {% if location.input_dock_id %}
+              {{ location.input_dock_id }}
+            {% endif %}
+          </div>
+        </div>
+        <div>{{ location.closest_of_type('warehouse').input_dock_id == location.id }}</div>
+        <div class="delete"><a href="{#{ url_for('.delete_category', object_id=category.id) }#}">{{ icon('times') }} Remove</a></div>
+      {% endcall %}
+    </ol>
+  </main>
+{% endblock %}
+

@@ -48,7 +48,7 @@ contacts_frontend.add_url_rule(
 contacts_frontend.add_url_rule(
     '/people/',
     view_func=ListContacts.as_view('list_people'),
-    defaults={'scope': 'people'},
+    defaults={'scope': 'person'},
 )
 
 

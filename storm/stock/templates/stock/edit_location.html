@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% set pagetitle='Edit location' if is_editing else 'Add a new location' %}
+
+{% from "_forms.html" import hfield %}
+
+{% block content %}
+  <h1>{{ pagetitle }}</h1>
+
+  <main>
+    <form class="form-horizontal form-narrow" role="form" method="post">
+      {{ form.csrf_token }}
+      {{ hfield(form.parent, 'Parent') }}
+      {{ hfield(form.name, 'Name') }}
+      {{ hfield(form.input_dock, 'Input dock') }}
+      {{ hfield(form.output_dock, 'Output dock') }}
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button class="btn btn-primary">{{ 'Apply changes' if is_editing else 'Create' }}</button>
+          <a class="btn btn-link" href="#">Cancel</a>
+          {% if edit %}<a href="{#{ url_for('.delete_category', object_id=object.id) }#}" class="btn btn-danger pull-right">Delete</a>{% endif %}
+        </div>
+      </div>
+    </form>
+  </main>
+{% endblock %}
+

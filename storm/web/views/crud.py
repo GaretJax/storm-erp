@@ -45,8 +45,11 @@ class EditView(SingleObjectMixin, TemplateView):
     model = None
     form_class = None
 
+    def get_form_class(self):
+        return self.form_class
+
     def get_form(self, **kwargs):
-        return self.form_class(**kwargs)
+        return self.get_form_class()(**kwargs)
 
     def get_success_url(self):
         raise NotImplementedError
@@ -64,19 +67,20 @@ class EditView(SingleObjectMixin, TemplateView):
         is_editing = object_id is not None
 
         if is_editing:
-            object = self.get_object(object_id)
-            form = self.get_form(obj=object)
+            self.object = self.get_object(object_id)
+            form = self.get_form(obj=self.object)
         else:
-            object = self.model()
+            self.object = self.model()
             form = self.get_form()
 
         if form.validate_on_submit():
             if is_editing:
-                return self.save_changes(form, object)
+                return self.save_changes(form, self.object)
             else:
-                return self.create_object(form, object)
+                return self.create_object(form, self.object)
 
-        return self.render(is_editing=is_editing, form=form, object=object)
+        return self.render(is_editing=is_editing, form=form,
+                           object=self.object)
 
 
 class DeleteView(SingleObjectMixin, TemplateView):

@@ -3,13 +3,14 @@ from sqlalchemy.orm import relationship, backref, object_session
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
 
-from storm.database import mptt, NULL
+from storm.database import mptt
+from storm.contacts.models import Contact
 
 
 Model = declarative_base()
 
 
-class Location(mptt.MPTTBase, Model):
+class Location(mptt.SortableMPTTBase, Model):
     """
     A named location for some stock units.
     """
@@ -17,21 +18,29 @@ class Location(mptt.MPTTBase, Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.Unicode, nullable=False)
+    # Warehouse / Room / Corridor / Rack / Shelf / Bucket
     type = sa.Column(sa.String(50), nullable=True)
-    sort_order = sa.Column(sa.Integer, nullable=False, server_default='0')
 
     __mapper_args__ = {
         'polymorphic_identity': None,
         'polymorphic_on': type,
     }
 
-    def __init__(self, name, parent=None):
+    def __init__(self, name='', parent=None):
         self.name = name
         if parent is not None:
             self.parent = parent
 
     def __repr__(self):
         return 'Location({})'.format(self.name)
+
+    def closest_of_type(self, type):
+        session = object_session(self)
+        parent_query = (session.query(Location)
+                        .filter(mptt.ancestors(self))
+                        .filter(Location.type == type)
+                        .order_by(Location.level.desc()))
+        return parent_query.first()
 
     def stock_of(self, stock_unit, lot=None, virtual=False,
                  include_sublocations=False):
@@ -81,6 +90,12 @@ class Location(mptt.MPTTBase, Model):
 
         return real + virtual
 
+    def path(self):
+        path = self.name
+        if self.parent:
+            path = '{} / {}'.format(self.parent.path(), path)
+        return path
+
 
 class Warehouse(Location):
     """
@@ -95,8 +110,25 @@ class Warehouse(Location):
         primary_key=True
     )
 
+    # The location to which SU will be moved to when indicating this warehouse
+    # as the target location for an incoming shipment.
+    input_dock_id = sa.Column(
+        sa.Integer,
+        sa.ForeignKey(Location.id, onupdate='CASCADE', ondelete='RESTRICTx'),
+        nullable=True,
+    )
+
+    # The location to which SU will be moved to for shipment preparation when
+    # indicating this warehouse as the source location for a delivery order.
+    output_dock_id = sa.Column(
+        sa.Integer,
+        sa.ForeignKey(Location.id, onupdate='CASCADE', ondelete='RESTRICT'),
+        nullable=True,
+    )
+
     __mapper_args__ = {
         'polymorphic_identity': 'warehouse',
+        'inherit_condition': id == Location.id,
     }
 
     def __repr__(self):
@@ -114,6 +146,11 @@ class StockUnit(Model):
     sku = sa.Column(sa.String(64), nullable=False, unique=True)
     # TODO: measurement_quantity = sa.Column(...), normalized to SI -> custom
     # in its own table (piece, carton, box, pallet,...)
+
+    # sale_quantity
+
+    # measurements (weight, size, volume,...)
+
     # ref to item/product (upc -> on product)
 
     def in_stock(self, location, virtual=False, include_sublocations=False):
@@ -149,7 +186,15 @@ class Lot(Model):
 class Batch(Model):
     __tablename__ = 'storm_stock_batch'
 
+    # TODO: Stateful mixin shall provide timestamping
+
     id = sa.Column(sa.Integer, primary_key=True)
+    type = sa.Column(sa.String(50), nullable=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': None,
+        'polymorphic_on': type,
+    }
 
     def schedule(self):
         """
@@ -204,6 +249,55 @@ class Batch(Model):
             session.query(Quant).filter(Quant.quantity == 0).delete()
 
 
+class IncomingShipment(Batch):
+    __tablename__ = 'storm_stock_incoming_shipment'
+
+    # Statuses: planned, shipped, received, processing, done
+
+    id = sa.Column(
+        sa.Integer,
+        sa.ForeignKey(Batch.id, onupdate='CASCADE', ondelete='CASCADE'),
+        primary_key=True
+    )
+
+    supplier_id = sa.Column(sa.Integer, sa.ForeignKey(Contact.id),
+                            nullable=False)
+    destination_warehouse_id = sa.Column(
+        sa.Integer, sa.ForeignKey(Warehouse.id))
+    tracking_number = sa.Column(sa.String(255), nullable=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'incoming_shipment',
+    }
+
+
+class DeliveryOrder(Batch):
+    __tablename__ = 'storm_stock_delivery_order'
+
+    id = sa.Column(
+        sa.Integer,
+        sa.ForeignKey(Batch.id, onupdate='CASCADE', ondelete='CASCADE'),
+        primary_key=True
+    )
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'delivery_order',
+    }
+
+
+class Inventory(Batch):
+    __tablename__ = 'storm_stock_physical_inventory'
+
+    id = sa.Column(
+        sa.Integer,
+        sa.ForeignKey(Batch.id, onupdate='CASCADE', ondelete='CASCADE'),
+        primary_key=True
+    )
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'physical_inventory',
+    }
+
 # class BatchStatus(states.StatusMixin, Model):
 #    __tablename__ = 'storm_stock_batch_status'
 #    __stateful_args__ = {
@@ -244,15 +338,15 @@ class Move(Model):
     lot = relationship(Lot, backref=backref('moves'))
 
     __table_args__ = (
-        sa.Index('batch_id',
+        sa.Index('batch_id_w_lot',
                  'source_location_id', 'target_location_id',
                  'stock_unit_id', 'lot_id',
-                 postgresql_where=lot != NULL,
+                 postgresql_where=sa.text('lot_id IS NOT NULL'),
                  unique=True),
-        sa.Index('batch_id',
+        sa.Index('batch_id_wo_lot',
                  'source_location_id', 'target_location_id',
                  'stock_unit_id',
-                 postgresql_where=lot == NULL,
+                 postgresql_where=sa.text('lot_id IS NULL'),
                  unique=True),
     )
 

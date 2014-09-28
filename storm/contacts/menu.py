@@ -5,7 +5,7 @@ main_menu_item = m.Menu('Address book')
 main_menu_item.add_all([
     m.MenuItem('Everybody', 'contacts.list_contacts'),
     m.MenuItem('Organizations', 'contacts.list_organizations'),
-    m.MenuItem('People', 'products.list_people'),
+    m.MenuItem('People', 'contacts.list_people'),
 ])
 
 contacts_menu = m.Menu('Contacts')

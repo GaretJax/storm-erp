@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% set pagetitle=scope.titlecase() if scope else 'Contacts' %}
+{% set pagetitle={'organization': 'Organizations', 'person': 'People', None: 'All contacts'}[scope] %}
 
 {% block content %}
   <h1>{{ pagetitle }}</h1>
@@ -21,7 +21,7 @@
             {% if c.contact_type == 'organization' %}
               <td><a href="{{ url_for('.edit_organization', object_id=c.id) }}"><strong>{{ c.name }}</strong></a></td>
             {% elif c.contact_type == 'person' %}
-              <td><a href="{{ url_for('.edit_person', object_id=c.id) }}"><strong>{{ c.last_name }}</strong> {{ c.first_name }}</a> <span class="text-muted">— {{ c.organization.name }}</span></td>
+              <td><a href="{{ url_for('.edit_person', object_id=c.id) }}"><strong>{{ c.last_name }}</strong> {{ c.first_name }}</a> <span class="text-muted">— {{ c.position}}, {{ c.organization.name }}</span></td>
             {% endif %}
             <td>
               <input type="checkbox" {% if c.is_customer %} checked="checked"{% endif %} /> /

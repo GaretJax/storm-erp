@@ -51,7 +51,7 @@
                         url: url,
                         type: 'post',
                         data: {
-                            category: c,
+                            instance: c,
                             parent: p,
                             previous_sibling: s,
                         },

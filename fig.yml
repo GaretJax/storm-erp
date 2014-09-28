@@ -1,0 +1,6 @@
+db:
+  image: harbor.wsfcomp.com/postgres
+  ports:
+    - "5432:5432"
+  volumes:
+    - /home/admin/local/postgres-db:/data

@@ -1,5 +1,6 @@
 import operator
-from sqlalchemy.orm import class_mapper
+import sqlalchemy as sa
+from sqlalchemy.orm import class_mapper, object_session
 from sqlalchemy_mptt.mixins import BaseNestedSets
 
 
@@ -11,6 +12,54 @@ class MPTTBase(BaseNestedSets):
     @classmethod
     def __declare_last__(cls):
         cls.register_tree()
+
+
+class SortableMPTTBase(MPTTBase):
+    sort_order = sa.Column(sa.Integer, nullable=False, server_default='0')
+
+    def _reorder(self, where):
+        session = object_session(self)
+        new_orders = sa.alias((
+            sa.select([
+                sa.over(sa.func.row_number(),
+                        order_by=self.__table__.c.sort_order).label('order'),
+                self.__table__.c.id
+            ])
+            .where(where)
+        ))
+        session.execute(self.__table__.update()
+                        .where(self.__table__.c.id == new_orders.c.id)
+                        .values({
+                            'sort_order': new_orders.c.order
+                        }))
+
+    def move(self, inside, after):
+        session = object_session(self)
+
+        # Update sort order on old siblings
+        ct = self.__table__
+        self._reorder(
+            (ct.c.parent_id == self.parent_id) & (ct.c.id != self.id))
+
+        # Update parent
+        self.parent = inside
+
+        # Update sort order on item
+        if after:
+            session.expire(after, ['sort_order'])
+            self.sort_order = after.sort_order + 1
+        else:
+            self.sort_order = 0
+
+        # Update sort order on new siblings
+        (session.query(self.__class__)
+         .filter(self.__class__.parent == inside)
+         .filter(self.__class__.sort_order >= self.sort_order)
+         .filter(self.__class__.id != self.id)
+         .update({'sort_order': self.__class__.sort_order + 1}))
+
+        # Rebuild correct ordering
+        self._reorder(ct.c.parent_id == self.parent_id)
 
 
 def _in_tree(node, selectable):
