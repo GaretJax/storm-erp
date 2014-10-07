@@ -1,0 +1,29 @@
+.warehouse-list {
+	margin: -15px;
+	padding: 0;
+	@include display-flex;
+	@include flex-wrap(wrap);
+
+	.warehouse {
+		background: #fff;
+		padding: 20px 30px;
+		display: block;
+		width: 300px;
+		margin: 15px;
+		min-height: 150px;
+		@include flex(1 0 300px);
+		@include border-radius(4px);
+		@include box-shadow(
+			rgba(#000, .1) 0px 0px 5px,
+			rgba(#000, .2) 0px 1px 1px
+		);
+
+		h2 {
+			margin: 0 0 10px 0;
+			padding: 0 0 10px 0;
+			color: #444;
+			border-bottom: 1px solid #eee;
+			display: block;
+		}
+	}
+}

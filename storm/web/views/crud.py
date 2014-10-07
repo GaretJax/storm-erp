@@ -1,4 +1,4 @@
-from flask import abort, render_template, redirect, url_for, flash
+from flask import abort, render_template, redirect, url_for
 from flask.views import View
 
 from storm.database import session
@@ -16,6 +16,10 @@ class TemplateView(View):
     def get_context_data(self, **ctx):
         return ctx
 
+    def dispatch_request(self, **kwargs):
+        self.kwargs = kwargs
+        return self.render(**kwargs)
+
     def render(self, **ctx):
         ctx = self.get_context_data(**ctx)
         return render_template(self.template_name, **ctx)
@@ -27,7 +31,8 @@ class ListView(TemplateView):
     def get_objects(self):
         return session.query(self.model)
 
-    def dispatch_request(self):
+    def dispatch_request(self, **kwargs):
+        self.kwargs = kwargs
         return self.render(object_list=self.get_objects())
 
 

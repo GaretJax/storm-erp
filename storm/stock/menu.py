@@ -2,7 +2,7 @@ from storm.web import menu as m
 
 stock_menu_item = m.Menu('Stock management')
 stock_menu_item.add_all([
-    m.MenuItem('Locations', 'stock.list_locations'),
+    m.MenuItem('Locations', 'stock.list_warehouses'),
     m.MenuItem('Movements', 'products.list_products'),
     m.MenuItem('Reporting', 'products.list_products'),
 ])
@@ -19,8 +19,8 @@ stock_menu.add_grouped('Inventory', [
     m.RawMenuItem('Create a new inventory', '#'),
 ])
 stock_menu.add_grouped('Locations', [
-    m.MenuItem('Manage locations', 'stock.list_locations'),
-    m.MenuItem('Add a new location', 'stock.add_location'),
+    m.MenuItem('Manage warehouses', 'stock.list_warehouses'),
+    m.MenuItem('Add a new warehouse', 'stock.add_warehouse'),
 ])
 stock_menu.add_grouped('Reporting', [
     m.RawMenuItem('All stock moves', '#'),

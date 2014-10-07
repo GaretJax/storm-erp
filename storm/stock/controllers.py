@@ -15,19 +15,25 @@ def register_menuitem(state):
     state.app.main_menu.add(stock_menu_item)
 
 
-class ListLocations(SidebarMixin, ListView):
+class WarehouseMixin:
+    def warehouse(self):
+        return session.query(models.Warehouse).get(self.kwargs['object_id'])
+
+
+class ListLocations(WarehouseMixin, SidebarMixin, ListView):
     sidebar_menu = stock_menu
     template_name = 'stock/locations.html'
 
     def get_objects(self):
         locations = (session.query(models.Location)
+                     .filter(mptt.descendants(self.warehouse()))
                      .order_by(models.Location.sort_order,
                                models.Location.name))
         locations = mptt.organize(locations)
         return locations
 
 stock_frontend.add_url_rule(
-    '/locations/',
+    '/locations/<int:object_id>/',
     view_func=ListLocations.as_view('list_locations')
 )
 
@@ -58,14 +64,19 @@ class EditLocation(SidebarMixin, EditView):
         flash('The location was correctly created.', 'success')
         return super().create_object(form, object)
 
-stock_frontend.add_url_rule(
-    '/locations/<int:object_id>/', methods=['GET', 'POST'],
-    view_func=EditLocation.as_view('edit_location')
-)
+
+class EditWarehouse(EditLocation):
+    model = models.Warehouse
+    form_class = forms.WarehouseForm
+    template_name = 'stock/edit_warehouse.html'
+
+stock_frontend.add_url_rule('/locations/<int:object_id>/',
+                            methods=['GET', 'POST'],
+                            view_func=EditWarehouse.as_view('edit_location'))
 
 stock_frontend.add_url_rule('/locations/add/warehouse/',
                             methods=['GET', 'POST'],
-                            view_func=EditLocation.as_view('add_location'))
+                            view_func=EditWarehouse.as_view('add_warehouse'))
 
 
 @stock_frontend.route('/locations/move/', methods=['POST'])
@@ -76,3 +87,19 @@ def move_location():
         return 'OK'
     else:
         abort(400)
+
+
+class ListWarehouses(SidebarMixin, ListView):
+    sidebar_menu = stock_menu
+    template_name = 'stock/warehouses.html'
+
+    def get_objects(self):
+        locations = (session.query(models.Warehouse)
+                     .order_by(models.Warehouse.sort_order,
+                               models.Warehouse.name))
+        return locations
+
+stock_frontend.add_url_rule(
+    '/locations/warehouses/',
+    view_func=ListWarehouses.as_view('list_warehouses')
+)

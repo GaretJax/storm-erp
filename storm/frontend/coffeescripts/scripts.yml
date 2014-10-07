@@ -1,0 +1,4 @@
+master.coffee:
+  - flask-hooks.bean
+  - tree.bean
+  - master.bean

@@ -43,3 +43,8 @@ def livereload():
     server.watch(env.static_dir)
     server.watch(env.templates_dir)
     server.serve(port=35729, host='0.0.0.0')
+
+
+@task
+def guard():
+    local('docker run -v $(pwd):/src -w /src -it -p 35729:35729 assets guard')

@@ -54,7 +54,7 @@ class LocationForm(ModelForm):
         only = ['name']
 
 
-class WarehouseForm(LocationForm):
+class WarehouseForm(ModelForm):
     input_dock = location_selector(allow_blank=True)
     output_dock = location_selector(allow_blank=True)
 

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% set pagetitle='Warehouses' %}
+
+{% block content %}
+  <h1 class="clearfix">{{ pagetitle }}</h1>
+  <main class="no-canvas">
+    <ol class="warehouse-list" data-sorting-endpoint="">
+      {% for warehouse in object_list %}
+        <li class="warehouse">
+          <h2>{{ warehouse.name }}</h2>
+          <a href="{{ url_for('.list_locations', object_id=warehouse.id) }}">Manage sublocations</a>
+        </li>
+      {% endfor %}
+      <li class="warehouse"><a href=""><i class="fa fa-plus"></i> Add a new warehouse</a></li>
+    </ol>
+  </main>
+{% endblock %}

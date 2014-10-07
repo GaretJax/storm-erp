@@ -60,7 +60,7 @@ body > .container-fluid {
 		}
 	}
 
-	> main, > section {
+	> main:not(.no-canvas), > section {
 		background: #fff;
 		padding: 20px 30px;
 		@include border-radius(4px);

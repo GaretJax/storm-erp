@@ -16,9 +16,18 @@
 @import "treetable";
 //@import "buttons";
 
+// Content
+@import "stock";
+
 .categories-tree .element {
 	> .delete {
 		@include flex(0 0 8em);
 		text-align: right;
 	}
+}
+
+
+.btn-empty {
+	border: 1px solid #bbb;
+	color: #888;
 }
