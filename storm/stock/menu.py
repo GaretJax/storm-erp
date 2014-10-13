@@ -9,7 +9,7 @@ stock_menu_item.add_all([
 
 stock_menu = m.Menu('Stock')
 stock_menu.add_grouped('Stock moves', [
-    m.RawMenuItem('Incoming shipments', '#'),
+    m.MenuItem('Incoming shipments', 'stock.list_shipments'),
     m.RawMenuItem('Internal stock moves', '#'),
     m.RawMenuItem('Delivery orders', '#'),
 ])

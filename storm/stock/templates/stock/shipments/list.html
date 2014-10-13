@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% set pagetitle='Incoming shipments' %}
+
+{% block content %}
+  <h1>{{ pagetitle }}</h1>
+
+  <div class="storm-header-btn">
+    <a class="btn btn-sm btn-empty" href="{{ url_for('.create_shipment') }}">Create shipment</a>
+  </div>
+
+  <main>
+    <div class="full-width-table">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Supplier</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for shipment in object_list %}
+            <tr>
+              <td>{{ shipment.supplier.name }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+{% endblock %}
+

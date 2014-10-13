@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, url_for, abort
+from flask import Blueprint, flash, url_for, abort, redirect
 
 from storm.database import session, mptt
 from storm.web.views import ListView, SidebarMixin, EditView
@@ -54,11 +54,11 @@ class EditLocation(SidebarMixin, EditView):
             return self.form_classes[None]
 
     def get_success_url(self):
-        return url_for('.list_locations')
+        return url_for('.list_warehouses')
 
     def save_changes(self, form, object):
         flash('The location was correctly updated.', 'success')
-        return super().create_object(form, object)
+        return super().save_changes(form, object)
 
     def create_object(self, form, object):
         flash('The location was correctly created.', 'success')
@@ -101,5 +101,41 @@ class ListWarehouses(SidebarMixin, ListView):
 
 stock_frontend.add_url_rule(
     '/locations/warehouses/',
-    view_func=ListWarehouses.as_view('list_warehouses')
+    view_func=ListWarehouses.as_view('list_warehouses'),
+)
+
+
+class ListShipments(SidebarMixin, ListView):
+    sidebar_menu = stock_menu
+    template_name = 'stock/shipments/list.html'
+
+    def get_objects(self):
+        return (session.query(models.IncomingShipment))
+
+stock_frontend.add_url_rule(
+    '/locations/shipments/',
+    view_func=ListShipments.as_view('list_shipments'),
+)
+
+
+class PlanShipment(SidebarMixin, EditView):
+    model = models.IncomingShipment
+    form_class = forms.ShipmentForm
+    template_name = 'stock/shipments/edit.html'
+    sidebar_menu = stock_menu
+
+    def get_success_url(self):
+        return url_for('.list_shipments')
+
+    def create_object(self, form, object):
+        flash('The shipment was correctly created.', 'success')
+        form.populate_obj(object)
+        #session.add(object)
+        import pdb; pdb.set_trace()
+        return redirect(self.get_success_url())
+
+stock_frontend.add_url_rule(
+    '/locations/shipments/new/',
+    methods=['GET', 'POST'],
+    view_func=PlanShipment.as_view('create_shipment'),
 )

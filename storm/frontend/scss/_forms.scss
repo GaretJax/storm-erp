@@ -2,6 +2,10 @@
 	max-width: 700px;
 }
 
+.form-actions {
+	margin-top: 5px;
+}
+
 .form-horizontal {
 	> .form-group:last-child {
 		margin-bottom: 0;
@@ -25,5 +29,31 @@
 		margin-top: 7px;
 		margin-bottom: 6px;
 		font-weight: bold;
+	}
+}
+
+table.formset {
+	width: 100%;
+
+	td, th {
+		padding: 7px 5px;
+
+		&:first-child {padding-left: 0;}
+		&:last-child {padding-right: 0;}
+	}
+	th {
+		padding-top: 0;
+	}
+	td {
+		border-bottom: 1px solid #ddd;
+	}
+	tbody > tr:first-child > td {
+		padding-top: 7px;
+		border-top: 1px solid #ddd;
+	}
+	tbody > tr:last-child > td {padding-bottom: 7px;}
+
+	tr:hover td {
+		background: rgba(#428BCA, 0.05);
 	}
 }

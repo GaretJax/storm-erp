@@ -265,6 +265,10 @@ class IncomingShipment(Batch):
     destination_warehouse_id = sa.Column(
         sa.Integer, sa.ForeignKey(Warehouse.id))
     tracking_number = sa.Column(sa.String(255), nullable=True)
+    expected_delivery = sa.Column(sa.DateTime(), nullable=True)
+
+    supplier = relationship(Contact)
+    destination_warehouse = relationship(Warehouse)
 
     __mapper_args__ = {
         'polymorphic_identity': 'incoming_shipment',

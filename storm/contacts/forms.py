@@ -25,6 +25,24 @@ def organization_label(org):
     return org.name
 
 
+def suppliers_query():
+    return (session.query(models.Contact)
+            .filter(models.Contact.is_supplier == True)
+            .filter(models.Contact.is_active == True)
+            .order_by(models.Contact.name))
+
+
+def contact_label(contact):
+    return contact.name
+
+
+def supplier_selector(allow_blank=False):
+    return QuerySelectField(query_factory=suppliers_query,
+                            blank_text='--- No supplier ---',
+                            get_label=contact_label,
+                            allow_blank=allow_blank)
+
+
 class PersonForm(ModelForm):
     organization = QuerySelectField(query_factory=organizations_query,
                                     blank_text='--- No organization ---',

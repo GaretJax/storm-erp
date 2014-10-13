@@ -1,6 +1,6 @@
 guard 'livereload' do
   watch(%r{.*/templates/.+\.html})
-  watch(%r{.*/static/styles/.+\.css})
+  watch(%r{.*/static/styles/.+\.css$})
   watch(%r{.*/static/scripts/.+\.js})
 end
 

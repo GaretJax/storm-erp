@@ -36,6 +36,22 @@ def category_selector(allow_blank=False):
                             allow_blank=allow_blank)
 
 
+def products_query():
+    return (session.query(models.Product)
+            .order_by(models.Product.name))
+
+
+def product_label(prod):
+    return prod.name
+
+
+def product_selector(allow_blank=False):
+    return QuerySelectField(query_factory=products_query,
+                            blank_text='--- No parent ---',
+                            get_label=product_label,
+                            allow_blank=allow_blank)
+
+
 class CategoryForm(ModelForm):
     parent = category_selector(allow_blank=True)
 

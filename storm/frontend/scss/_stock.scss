@@ -11,6 +11,7 @@
 		width: 300px;
 		margin: 15px;
 		min-height: 150px;
+
 		@include flex(1 0 300px);
 		@include border-radius(4px);
 		@include box-shadow(
@@ -24,6 +25,98 @@
 			color: #444;
 			border-bottom: 1px solid #eee;
 			display: block;
+		}
+	}
+}
+
+.formset.batch-products {
+	td.product {
+		width: 65%;
+	}
+	td, th {
+		&:first-child {
+			padding-right: 0;
+			& + td {
+				padding-left: 0px;
+			}
+		}
+		&:last-child {
+			padding-right: 5px;
+		}
+	}
+	.qty input {
+		text-align: right;
+		min-width: 80px;
+	}
+}
+
+.storm-create-shipment {
+	min-width: 400px;
+
+	.src-dst {
+		@include display-flex;
+		@include align-items(center);
+		.form-group {
+			@include flex(1 1 50%);
+		}
+		i {
+			@include flex(0 0 50px);
+			margin: 18px 0 10px 0;
+			text-align: center;
+			color: #bbb;
+			font-size: 1.5em;
+		}
+	}
+
+	.batch-products {
+		margin: 10px 0 25px;
+	}
+
+	.shipping-details {
+		@include display-flex;
+		@include flex-wrap(wrap);
+		margin: 0 -10px 10px;
+		.form-group {
+			margin-right: 10px;
+			margin-left: 10px;
+
+			&:first-child {
+				@include flex(0 0 229px);
+
+				i {
+					width: 13px;
+					position: absolute;
+					left: 3px;
+					top: 6px;
+					line-height: 23px;
+					border-right: 1px solid #ddd;
+					display: block;
+					width: 28px;
+					text-align: center;
+					color: #aaa;
+				}
+
+				input {
+					display: table-cell;
+					padding-left: 37px;
+				}
+
+				.date {
+					display: inline-table;
+					width: 130px;
+					margin-right: 5px;
+					position: relative;
+				}
+				.time {
+					display: inline-table;
+					width: 90px;
+					position: relative;
+				}
+			}
+			&:last-child {
+				@include flex(1 1 1%);
+				min-width: 250px;
+			}
 		}
 	}
 }

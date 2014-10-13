@@ -4,3 +4,10 @@ db:
     - "5432:5432"
   volumes_from:
     - pgdata
+
+assets:
+  image: garetjax/assets-builder
+  volumes:
+    - .:/src
+  ports:
+    - "35729:35729"

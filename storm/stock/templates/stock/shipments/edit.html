@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% set pagetitle='Edit planned incoming shipment' if is_editing else 'Plan a new incoming shipment' %}
+
+{% from "_forms.html" import field, checkbox %}
+
+{% block content %}
+  <h1>{{ pagetitle }}</h1>
+
+  <main>
+    <form class="form-narrow storm-create-shipment" role="form" method="post">
+      {{ form.csrf_token }}
+
+      <div class="src-dst">
+        {{ field(form.supplier) }}
+        <i class="fa fa-arrow-right"></i>
+        {{ field(form.destination_warehouse) }}
+      </div>
+
+      <div class="form-group">
+        <table class="formset batch-products">
+          <thead>
+            <tr>
+              <th colspan="2">Products</th>
+              <th>Quantity</th>
+              <th></th>
+            </tr>
+          </thead>
+            <tbody>
+            {% for f in form.products %}
+              <tr>
+                <td><a href="#" class="btn btn-link"><i class="fa fa-close"></i></a></td>
+                <td class="product">{{ f.product(class='form-control') }}</td>
+                <td class="qty">{{ f.quantity(class='form-control') }}</td>
+                <td>
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-cog"></i> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                      <li><a href="#">Manage serial numbers</a></li>
+                      <li><a href="#">Manage lots</a></li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+            <tr class="formset-add">
+              <td><a href="#" class="btn btn-link"><i class="fa fa-plus"></i></a></td>
+              <td colspan="3" class="text-muted">Add another product</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="shipping-details">
+        <div class="form-group">
+          {{ form.expected_delivery.label(text='Expected delivery') }}
+          <div class="datetime">
+            <div class="date">
+              <i class="fa fa-calendar"></i>
+              {{ form.expected_delivery(class='form-control')|safe }}
+            </div>
+            <div class="time">
+              <i class="fa fa-clock-o"></i>
+              {{ form.expected_delivery(class='form-control')|safe }}
+            </div>
+          </div>
+          {% if form.expected_delivery.errors %}
+            <ul class="errors">
+            {% for error in form.expected_delivery.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+        {{ field(form.tracking_number, 'Tracking number') }}
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary">{{ 'Apply changes' if is_editing else 'Create' }}</button>
+        <a class="btn btn-link" href="#">Cancel</a>
+        {% if is_editing %}<button class="btn btn-danger pull-right">Delete</button>{% endif %}
+      </div>
+    </form>
+  </main>
+{% endblock %}
+
