@@ -104,5 +104,21 @@ class ShipmentForm(ModelForm):
     products = fields.FieldList(fields.FormField(IncomingMoveForm),
                                 min_entries=1)
 
+    def populate_obj(self, obj):
+        obj.supplier = self.data['supplier']
+        obj.destination_warehouse = self.data['destination_warehouse']
+
+        source = models.Location.get_supplier_location(obj.supplier)
+
+        for p in self.products:
+            sku = models.StockUnit.for_product(p.data['product'])
+            models.Move(
+                batch=obj,
+                source=source,
+                target=obj.destination_warehouse,
+                stock_unit=sku,
+                quantity=p.data['quantity'],
+            )
+
     class Meta:
         model = models.IncomingShipment

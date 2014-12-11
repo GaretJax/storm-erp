@@ -130,8 +130,7 @@ class PlanShipment(SidebarMixin, EditView):
     def create_object(self, form, object):
         flash('The shipment was correctly created.', 'success')
         form.populate_obj(object)
-        #session.add(object)
-        import pdb; pdb.set_trace()
+        session.add(object)
         return redirect(self.get_success_url())
 
 stock_frontend.add_url_rule(

@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship, backref, object_session
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
 
-from storm.database import mptt
+from storm.database import mptt, get_or_create
 from storm.contacts.models import Contact
 
 
@@ -96,6 +96,11 @@ class Location(mptt.SortableMPTTBase, Model):
             path = '{} / {}'.format(self.parent.path(), path)
         return path
 
+    @classmethod
+    def get_supplier_location(cls, supplier):
+        session = object_session(supplier)
+        return get_or_create(session, cls, name='Suppliers')
+
 
 class Warehouse(Location):
     """
@@ -156,6 +161,12 @@ class StockUnit(Model):
     def in_stock(self, location, virtual=False, include_sublocations=False):
         return location.stock_of(self, virtual=virtual,
                                  include_sublocations=include_sublocations)
+
+    @classmethod
+    def for_product(cls, product):
+        session = object_session(product)
+        return get_or_create(session, cls, {'sku': product.upc},
+                             product=product)
 
 
 class Lot(Model):
