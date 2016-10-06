@@ -2,7 +2,7 @@ Babel==2.3.4
 Flask-Babel==0.11.1
 Flask-Mail==0.9.1
 Flask-Principal==0.4.0
-Flask-WTF==0.13
+Flask-WTF==0.13.1
 Flask==0.11.1
 Jinja2==2.8
 Mako==1.0.4
