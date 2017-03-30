@@ -22,5 +22,5 @@ raven==6.0.0
 speaklater==1.3
 sqlalchemy-mptt==0.2.1
 sqltap==0.3.10
-uwsgi==2.0.14
+uwsgi==2.0.15
 validators==0.11.3
