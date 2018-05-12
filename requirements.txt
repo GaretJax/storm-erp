@@ -18,7 +18,7 @@ itsdangerous==0.24
 psycopg2==2.7.4
 python-dateutil==2.7.3
 pytz==2018.4
-raven==6.7.0
+raven==6.8.0
 speaklater==1.3
 sqlalchemy-mptt==0.2.2
 sqltap==0.3.10
