@@ -9,7 +9,7 @@ Mako==1.0.7
 MarkupSafe==1.0
 Pillow==5.1.0
 SQLAlchemy==1.2.8
-WTForms==2.2
+WTForms==2.2.1
 Werkzeug==0.14.1
 alembic==0.9.9
 blinker==1.4
