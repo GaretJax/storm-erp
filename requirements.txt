@@ -7,7 +7,7 @@ Flask==1.0.2
 Jinja2==2.10
 Mako==1.0.7
 MarkupSafe==1.0
-Pillow==5.1.0
+Pillow==5.2.0
 SQLAlchemy==1.2.9
 WTForms==2.2.1
 Werkzeug==0.14.1
