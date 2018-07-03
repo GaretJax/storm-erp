@@ -20,7 +20,7 @@ python-dateutil==2.7.3
 pytz==2018.5
 raven==6.9.0
 speaklater==1.3
-sqlalchemy-mptt==0.2.2
+sqlalchemy-mptt==0.2.3
 sqltap==0.3.10
 uwsgi==2.0.17
 validators==0.12.2
