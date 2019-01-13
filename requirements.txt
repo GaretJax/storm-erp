@@ -11,7 +11,7 @@ Pillow==5.4.1
 SQLAlchemy==1.2.16
 WTForms==2.2.1
 Werkzeug==0.14.1
-alembic==1.0.5
+alembic==1.0.6
 blinker==1.4
 click==7.0
 itsdangerous==1.1.0
