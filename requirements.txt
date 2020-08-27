@@ -1,5 +1,5 @@
 Babel==2.8.0
-Flask-Babel==1.0.0
+Flask-Babel==2.0.0
 Flask-Mail==0.9.1
 Flask-Principal==0.4.0
 Flask-WTF==0.14.3
