@@ -4,7 +4,7 @@ Flask-Mail==0.9.1
 Flask-Principal==0.4.0
 Flask-WTF==0.14.3
 Flask==2.0.0
-Jinja2==3.0.0
+Jinja2==3.0.1
 Mako==1.1.4
 MarkupSafe==2.0.1
 Pillow==8.2.0
